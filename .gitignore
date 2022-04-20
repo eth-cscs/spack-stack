@@ -1,0 +1,5 @@
+*.tar.zst
+.spack-env
+._view
+spack.lock
+install
