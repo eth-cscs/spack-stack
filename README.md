@@ -1,4 +1,4 @@
-`make` should bootstrap first gcc, then nvhpc using a gcc, then build openmpi with gcc and nvhpc, then create a tarball.
+`make` bootstraps first gcc, then nvhpc using a gcc, then build openmpi with gcc and nvhpc, then create a tarball.
 
 `make install` will extract the tarball on the target directory.
 
