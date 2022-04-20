@@ -3,3 +3,5 @@
 ._view
 spack.lock
 install
+tools/view
+register-compilers

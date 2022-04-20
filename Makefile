@@ -7,47 +7,54 @@ SPACK := $(FAST_FILESYSTEM)/spack/bin/spack
 BWRAP := bwrap --dev-bind / / --bind "$(FAST_FILESYSTEM)/$(ROOT)" "$(ROOT)" --bind "$(CURDIR)" "$(CURDIR)"
 TIME := time
 
+.PHONY: all fast_store install clean
+
 all: store.tar.zst
 
-gcc/spack.lock: gcc/spack.yaml
+fast_store:
+	mkdir -p $(FAST_STORE)
+
+gcc/spack.lock: gcc/spack.yaml fast_store
 	$(BWRAP) $(SPACK) -e ./gcc concretize -f
 
-gcc/install: gcc/spack.lock
+gcc/install: gcc/spack.lock fast_store
 	$(BWRAP) $(SPACK) -e ./gcc install -j$(JOBS) > /dev/null & \
 	$(BWRAP) $(SPACK) -e ./gcc install -j$(JOBS) > /dev/null & \
 	$(BWRAP) $(SPACK) -e ./gcc install -j$(JOBS) > /dev/null & \
 	$(BWRAP) $(SPACK) -e ./gcc install -j$(JOBS) -v && touch $@
 
-nvhpc/register-compilers: gcc/install
-	$(BWRAP) $(SPACK) -e ./nvhpc compiler find $$($(SPACK) -e ./gcc find --format '{prefix}' gcc@9) && touch $@
+nvhpc/register-compilers: gcc/install fast_store
+	$(BWRAP) $(SPACK) -e ./nvhpc compiler find $$($(SPACK) -e ./gcc find --format '{prefix}' gcc@11) && touch $@
 
-nvhpc/spack.lock: nvhpc/register-compilers nvhpc/spack.yaml
+nvhpc/spack.lock: nvhpc/register-compilers nvhpc/spack.yaml fast_store
 	$(BWRAP) $(SPACK) -e ./nvhpc concretize -f
 
-nvhpc/install: nvhpc/spack.lock
+nvhpc/install: nvhpc/spack.lock fast_store
 	$(BWRAP) $(SPACK) -e ./nvhpc install -j$(JOBS) > /dev/null & \
 	$(BWRAP) $(SPACK) -e ./nvhpc install -j$(JOBS) > /dev/null & \
 	$(BWRAP) $(SPACK) -e ./nvhpc install -j$(JOBS) > /dev/null & \
 	$(BWRAP) $(SPACK) -e ./nvhpc install -j$(JOBS) -v && touch $@
 
-openmpi/register-compilers: gcc/install nvhpc/install
-	$(BWRAP) $(SPACK) -e ./openmpi compiler find $$($(SPACK) -e ./gcc find --format '{prefix}' gcc@9) && touch $@
+openmpi/register-compilers: gcc/install nvhpc/install fast_store
+	$(BWRAP) $(SPACK) -e ./openmpi compiler find $$($(BWRAP) $(SPACK) -e ./gcc find --format '{prefix}' gcc@11) && \
+	$(BWRAP) $(SPACK) -e ./openmpi compiler find "$$($(BWRAP) find "$$($(BWRAP) $(SPACK) -e ./nvhpc find --format '{prefix}' nvhpc)" -iname compilers -type d | head -n1 )/bin" && \
+	touch $@
 
-openmpi/spack.lock: openmpi/spack.yaml openmpi/register-compilers
+openmpi/spack.lock: openmpi/spack.yaml openmpi/register-compilers fast_store
 	# Concretize
 	$(BWRAP) $(SPACK) -e ./openmpi concretize -f
 
-openmpi/install: openmpi/spack.lock
+openmpi/install: openmpi/spack.lock fast_store
 	$(BWRAP) $(SPACK) -e ./openmpi install -j$(JOBS) > /dev/null & \
 	$(BWRAP) $(SPACK) -e ./openmpi install -j$(JOBS) > /dev/null & \
 	$(BWRAP) $(SPACK) -e ./openmpi install -j$(JOBS) > /dev/null & \
 	$(BWRAP) $(SPACK) -e ./openmpi install -j$(JOBS) -v && touch $@
 
 # tools (tar with zstd)
-tools/spack.lock: tools/spack.yaml
+tools/spack.lock: tools/spack.yaml fast_store
 	$(BWRAP) $(SPACK) -e ./tools concretize -f
 
-tools/install: tools/spack.lock
+tools/install: tools/spack.lock fast_store
 	$(BWRAP) $(SPACK) -e ./tools install -j$(JOBS) > /dev/null & \
 	$(BWRAP) $(SPACK) -e ./tools install -j$(JOBS) > /dev/null & \
 	$(BWRAP) $(SPACK) -e ./tools install -j$(JOBS) > /dev/null & \
@@ -59,7 +66,8 @@ store.tar.zst: tools/install openmpi/install
 	$(TIME) ./tools/view/bin/tar --use-compress-program="./tools/view/bin/zstd -T0" -cf "$$staging/$@" -C $(FAST_STORE) . && \
 	$(TIME) mv "$$staging/$@" $@
 
-install: store.tar.zst tools/install
-	$(TIME) ./tools/view/bin/tar --use-compress-program="./tools/view/bin/zstd -T0" -C $(STORE) --totals -xvf $<
+install: tools/install
+	$(TIME) ./tools/view/bin/tar --use-compress-program="./tools/view/bin/zstd -T0" -C $(STORE)-staging --totals -xvf store.tar.zst
+
 clean:
 	rm -f -- */spack.lock */install */register-compilers

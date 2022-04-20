@@ -1,5 +1,5 @@
 spack:
-  specs: ['gcc@:11', 'gcc@:10', 'gcc@:9', 'gcc@:8']
+  specs: ['gcc@:11', 'gcc@:10']
   view: false
   config:
     install_tree:
