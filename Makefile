@@ -1,4 +1,5 @@
-JOBS :=64
+JOBS := 64
+BUILDS := 1 2 3
 FAST_FILESYSTEM := /dev/shm
 ROOT := /apps
 STORE := $(ROOT)/manali/UES/store
@@ -11,54 +12,45 @@ TIME := time
 
 all: store.tar.zst
 
-fast_store:
+$(FAST_STORE):
 	mkdir -p $(FAST_STORE)
 
-gcc/spack.lock: gcc/spack.yaml fast_store
+gcc/spack.lock: gcc/spack.yaml $(FAST_STORE)
 	$(BWRAP) $(SPACK) -e ./gcc concretize -f
 
-gcc/install: gcc/spack.lock fast_store
-	$(BWRAP) $(SPACK) -e ./gcc install -j$(JOBS) > /dev/null & \
-	$(BWRAP) $(SPACK) -e ./gcc install -j$(JOBS) > /dev/null & \
-	$(BWRAP) $(SPACK) -e ./gcc install -j$(JOBS) > /dev/null & \
-	$(BWRAP) $(SPACK) -e ./gcc install -j$(JOBS) -v && touch $@
+gcc/install: gcc/spack.lock $(FAST_STORE)
+	$(foreach n, $(BUILDS), $(BWRAP) $(SPACK) -e ./gcc install -j$(JOBS) > /dev/null &) \
+		$(BWRAP) $(SPACK) -e ./gcc install -j$(JOBS) -v; touch $@
 
-nvhpc/register-compilers: gcc/install fast_store
+nvhpc/register-compilers: gcc/install $(FAST_STORE)
 	$(BWRAP) $(SPACK) -e ./nvhpc compiler find $$($(SPACK) -e ./gcc find --format '{prefix}' gcc@11) && touch $@
 
-nvhpc/spack.lock: nvhpc/register-compilers nvhpc/spack.yaml fast_store
+nvhpc/spack.lock: nvhpc/register-compilers nvhpc/spack.yaml $(FAST_STORE)
 	$(BWRAP) $(SPACK) -e ./nvhpc concretize -f
 
-nvhpc/install: nvhpc/spack.lock fast_store
-	$(BWRAP) $(SPACK) -e ./nvhpc install -j$(JOBS) > /dev/null & \
-	$(BWRAP) $(SPACK) -e ./nvhpc install -j$(JOBS) > /dev/null & \
-	$(BWRAP) $(SPACK) -e ./nvhpc install -j$(JOBS) > /dev/null & \
-	$(BWRAP) $(SPACK) -e ./nvhpc install -j$(JOBS) -v && touch $@
+nvhpc/install: nvhpc/spack.lock $(FAST_STORE)
+	$(foreach n, $(BUILDS), $(BWRAP) $(SPACK) -e ./nvhpc install -j$(JOBS) > /dev/null &) \
+		$(BWRAP) $(SPACK) -e ./nvhpc install -j$(JOBS) -v && touch $@
 
-openmpi/register-compilers: gcc/install nvhpc/install fast_store
+openmpi/register-compilers: gcc/install nvhpc/install $(FAST_STORE)
 	$(BWRAP) $(SPACK) -e ./openmpi compiler find $$($(BWRAP) $(SPACK) -e ./gcc find --format '{prefix}' gcc@11) && \
 	$(BWRAP) $(SPACK) -e ./openmpi compiler find "$$($(BWRAP) find "$$($(BWRAP) $(SPACK) -e ./nvhpc find --format '{prefix}' nvhpc)" -iname compilers -type d | head -n1 )/bin" && \
 	touch $@
 
-openmpi/spack.lock: openmpi/spack.yaml openmpi/register-compilers fast_store
-	# Concretize
+openmpi/spack.lock: openmpi/spack.yaml openmpi/register-compilers $(FAST_STORE)
 	$(BWRAP) $(SPACK) -e ./openmpi concretize -f
 
-openmpi/install: openmpi/spack.lock fast_store
-	$(BWRAP) $(SPACK) -e ./openmpi install -j$(JOBS) > /dev/null & \
-	$(BWRAP) $(SPACK) -e ./openmpi install -j$(JOBS) > /dev/null & \
-	$(BWRAP) $(SPACK) -e ./openmpi install -j$(JOBS) > /dev/null & \
-	$(BWRAP) $(SPACK) -e ./openmpi install -j$(JOBS) -v && touch $@
+openmpi/install: openmpi/spack.lock $(FAST_STORE)
+	$(foreach n, $(BUILDS), $(BWRAP) $(SPACK) -e ./openmpi install -j$(JOBS) > /dev/null &) \
+		$(BWRAP) $(SPACK) -e ./openmpi install -j$(JOBS) -v && touch $@
 
 # tools (tar with zstd)
-tools/spack.lock: tools/spack.yaml fast_store
+tools/spack.lock: tools/spack.yaml $(FAST_STORE)
 	$(BWRAP) $(SPACK) -e ./tools concretize -f
 
-tools/install: tools/spack.lock fast_store
-	$(BWRAP) $(SPACK) -e ./tools install -j$(JOBS) > /dev/null & \
-	$(BWRAP) $(SPACK) -e ./tools install -j$(JOBS) > /dev/null & \
-	$(BWRAP) $(SPACK) -e ./tools install -j$(JOBS) > /dev/null & \
-	$(BWRAP) $(SPACK) -e ./tools install -j$(JOBS) -v && touch $@
+tools/install: tools/spack.lock $(FAST_STORE)
+	$(foreach n, $(BUILDS), $(BWRAP) $(SPACK) -e ./tools install -j$(JOBS) > /dev/null &) \
+		$(BWRAP) $(SPACK) -e ./tools install -j$(JOBS) -v && touch $@
 
 store.tar.zst: tools/install openmpi/install
 	# Create a tarball
