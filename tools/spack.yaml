@@ -3,14 +3,7 @@ spack:
   specs:
   - tar
   - zstd+programs compression=none
-  config:
-    install_tree:
-      root: /dev/shm/tools
-  view:
-    default:
-      root: /apps/manali/UES/hstoppel/tools/view
-      link_type: symlink
-      link: run
+  view: ./view
   'compilers:':
   - compiler:
       spec: gcc@7.5.0
