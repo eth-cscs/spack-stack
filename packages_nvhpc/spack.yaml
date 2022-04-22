@@ -47,30 +47,4 @@ spack:
       externals:
       - spec: xpmem@0.29.2
         prefix: /opt/cray/xpmem/2.2.40-2.1_2.56__g3cf3325.shasta
-  'compilers:':
-  - compiler:
-      spec: gcc@11.3.0
-      paths:
-        cc: /apps/manali/UES/store/linux-sles15-zen/gcc-7.5.0/gcc-11.3.0-iydolojhhd3z5kundhlrq5qojldg6xn7/bin/gcc
-        cxx: /apps/manali/UES/store/linux-sles15-zen/gcc-7.5.0/gcc-11.3.0-iydolojhhd3z5kundhlrq5qojldg6xn7/bin/g++
-        f77: /apps/manali/UES/store/linux-sles15-zen/gcc-7.5.0/gcc-11.3.0-iydolojhhd3z5kundhlrq5qojldg6xn7/bin/gfortran
-        fc: /apps/manali/UES/store/linux-sles15-zen/gcc-7.5.0/gcc-11.3.0-iydolojhhd3z5kundhlrq5qojldg6xn7/bin/gfortran
-      flags: {}
-      operating_system: sles15
-      target: x86_64
-      modules: []
-      environment: {}
-      extra_rpaths: []
-  - compiler:
-      spec: nvhpc@22.3
-      paths:
-        cc: /apps/manali/UES/store/linux-sles15-zen3/gcc-11.3.0/nvhpc-22.3-hcl6kkxlsu72w6mjbfpzesujqdmfw74n/Linux_x86_64/22.3/compilers/bin/nvc
-        cxx: /apps/manali/UES/store/linux-sles15-zen3/gcc-11.3.0/nvhpc-22.3-hcl6kkxlsu72w6mjbfpzesujqdmfw74n/Linux_x86_64/22.3/compilers/bin/nvc++
-        f77: /apps/manali/UES/store/linux-sles15-zen3/gcc-11.3.0/nvhpc-22.3-hcl6kkxlsu72w6mjbfpzesujqdmfw74n/Linux_x86_64/22.3/compilers/bin/nvfortran
-        fc: /apps/manali/UES/store/linux-sles15-zen3/gcc-11.3.0/nvhpc-22.3-hcl6kkxlsu72w6mjbfpzesujqdmfw74n/Linux_x86_64/22.3/compilers/bin/nvfortran
-      flags: {}
-      operating_system: sles15
-      target: x86_64
-      modules: []
-      environment: {}
-      extra_rpaths: []
+  'compilers:': []
