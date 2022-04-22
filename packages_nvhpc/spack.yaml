@@ -7,9 +7,6 @@ spack:
   - ucx%gcc +rdmacm +cma +verbs +xpmem +ib_hw_tm +mlx5_dv +dc +ud +rc +dm +optimizations
     +gdrcopy ~assertions ~debug
   view: false
-  config:
-    install_tree:
-      root: /apps/manali/UES/store
   packages:
     all:
       compiler: [nvhpc, gcc]

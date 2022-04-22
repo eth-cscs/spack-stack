@@ -1,9 +1,6 @@
 spack:
   specs: ['gcc@:11', 'gcc@:10']
   view: false
-  config:
-    install_tree:
-      root: /apps/manali/UES/store
   packages:
     gcc:
       variants: [+bootstrap +strip]

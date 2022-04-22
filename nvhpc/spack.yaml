@@ -1,7 +1,4 @@
 spack:
   specs: [nvhpc~blas~lapack~mpi]
   view: false
-  config:
-    install_tree:
-      root: /apps/manali/UES/store
   'compilers:': []
