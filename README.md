@@ -8,8 +8,6 @@
 
 Note:
 
-Some paths are still hard-coded (see config section of spack.yaml files).
-
 By default Spack is assumed to live in `/dev/shm/spack`.
 
 https://github.com/spack/spack/pull/30215 is required for now.
