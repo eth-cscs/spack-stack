@@ -5,7 +5,7 @@ export SPACK SPACK_JOBS STORE
 
 .PHONY: all store gcc nvhpc packages_gcc packages_nvhpc clean
 
-all: store.tar.zstd
+all: store.tar.zst
 
 store:
 	mkdir -p $(STORE)
