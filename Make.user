@@ -1,0 +1,3 @@
+SPACK_JOBS := 64
+STORE := /apps/manali/UES/store
+SPACK := spack

@@ -1,9 +1,10 @@
 spack:
   concretization: together
   specs:
-  - tar
   - zstd+programs compression=none
   view: ./view
+  include:
+  - ../config/packages.yaml
   'compilers:':
   - compiler:
       spec: gcc@7.5.0
