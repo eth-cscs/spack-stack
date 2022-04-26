@@ -1,5 +1,5 @@
 spack:
-  specs: ['gcc@:11', 'gcc@:10', 'zstd +programs compression=none']
+  specs: ['gcc@:11', 'gcc@:10', zstd +programs compression=none]
   view: false
   include:
   - ../config/packages.yaml
