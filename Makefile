@@ -3,7 +3,7 @@
 # Propagate those variables to other other Makefiles
 export SPACK SPACK_JOBS STORE
 
-.PHONY: all store gcc nvhpc packages_gcc packages_nvhpc clean
+.PHONY: all store gcc nvhpc packages_gcc packages_nvhpc store.tar.zst clean
 
 all: store.tar.zst
 
