@@ -1,19 +1,39 @@
-`make` bootstraps first gcc, then nvhpc using a gcc, then builds openmpi with gcc and nvhpc, finally creates a tarball.
+Bootstrap GCC and NVHPC, and build an HPC software stack based on OpenMPI, with a few
+unique features:
 
-`make install` will extract the tarball on the target directory.
+1. parallel package builds (with multiple jobs per package);
+2. building on a fast filesystem, targeting a slower filesystem, without worrying
+   about relocation issues.
 
-- The software stack is built in memory
-- `bwrap` is used to map say `/dev/shm/apps` to `/apps` to avoid relocation issues, assuming the final binaries are going to live in /apps/something/...
-- There's parallellism over 4 packages, each using `JOBS=64` threads.
+**Requirements**:
 
-Note:
+- `spack` with the following patches:
+  1. https://github.com/spack/spack/pull/30254
+  2. https://github.com/spack/spack/pull/30215
+- `bwrap` (optionally)
 
-By default Spack is assumed to live in `/dev/shm/spack`.
 
-https://github.com/spack/spack/pull/30215 is required for now.
+**Usage**:
 
-Customizing install locations goes like:
+`make` builds a tarball `store.tar.zst` with all compilers and the software stack.
 
-```console
-make SPACK=/dev/shm/spack/bin/spack FAST_FILESYSTEM=/dev/shm ROOT=/apps STORE=/apps/manali/UES/store install
+A few variables can be set in `Make.user`:
+
+- `STORE`: spack install location;
+- `SPACK`: path to `spack`;
+- `SPACK_JOBS`: maximum number of jobs per spack package install.
+
+To build packages in parallel with nice output, use the following flags:
+
 ```
+make SPACK_COLOR=always -j<N> -O
+```
+
+To build on a fast filesystem, use `bwrap`, for example:
+
+```
+./bwrap.sh make SPACK_COLOR=always -j -O
+```
+
+This allows you to map the directory `/dev/shm/$(STORE) -> $(STORE)`, so that the Spack
+install directory is fast.
