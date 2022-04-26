@@ -3,7 +3,7 @@ spack:
   specs:
   - netcdf-fortran
   - osu-micro-benchmarks +cuda cuda_arch=80
-  - openmpi@4.0:4%nvhpc +cuda +cxx schedulers=slurm fabrics=ucx
+  - openmpi@4.0:4%nvhpc +cuda +cxx +pmi ~pmix schedulers=slurm fabrics=ucx
   - ucx%gcc +rdmacm +cma +verbs +xpmem +ib_hw_tm +mlx5_dv +dc +ud +rc +dm +optimizations
     +gdrcopy ~assertions ~debug
   view: false
