@@ -1,10 +1,11 @@
-SPACK := $(SPACK) -c config:install_tree:root:$(STORE)
-
 .PHONY: all install
 
 all: install
 
-spack.lock: spack.yaml
+update-config:
+	$(SPACK) -e . config add config:install_tree:root:$(STORE) && touch $@
+
+spack.lock: spack.yaml update-config
 	$(SPACK) -e . concretize -f
 
 install.Makefile: spack.lock
@@ -14,5 +15,5 @@ install: install.Makefile
 	$(MAKE) -f install.Makefile
 
 clean:
-	$(MAKE) -f install.Makefile clean
-	rm -rf -- spack.lock .spack-env install.Makefile
+	if [ -f install.Makefile ]; then $(MAKE) -f install.Makefile clean; fi
+	rm -rf -- update-config spack.lock .spack-env install.Makefile

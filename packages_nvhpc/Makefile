@@ -1,17 +1,16 @@
-SPACK := $(SPACK) -c config:install_tree:root:$(STORE)
-
 .PHONY: all install
 
 all: install
 
 # TODO: improve spack compiler find/add, especially for nvhpc.
-register-compilers:
+update-config:
+	$(SPACK) -e . config add config:install_tree:root:$(STORE) && \
 	$(SPACK) -e . compiler find \
 		"$$($(SPACK) -e ../gcc find --format '{prefix}' gcc@11)" \
 		"$$(find "$$($(SPACK) -e ../nvhpc find --format '{prefix}' nvhpc)" -iname compilers -type d | head -n1 )/bin" && \
 	touch $@
 
-spack.lock: spack.yaml register-compilers
+spack.lock: spack.yaml update-config
 	$(SPACK) -e . concretize -f
 
 install.Makefile: spack.lock
@@ -21,5 +20,5 @@ install: install.Makefile
 	$(MAKE) -f install.Makefile
 
 clean:
-	$(MAKE) -f install.Makefile clean
-	rm -rf -- register-compilers spack.lock .spack-env install.Makefile
+	if [ -f install.Makefile ]; then $(MAKE) -f install.Makefile clean; fi
+	rm -rf -- update-config spack.lock .spack-env install.Makefile

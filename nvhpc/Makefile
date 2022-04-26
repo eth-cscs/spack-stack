@@ -1,14 +1,13 @@
-SPACK := $(SPACK) -c config:install_tree:root:$(STORE)
-
 .PHONY: all install
 
 all: install
 
-register-compilers:
-	$(SPACK) -e . compiler find $$($(SPACK) -e ../gcc find --format '{prefix}' gcc@11) && \
+update-config:
+	$(SPACK) -e . config add config:install_tree:root:$(STORE) && \
+	$(SPACK) -e . compiler find $$($(SPACK) $(SPACK_FLAGS) -e ../gcc find --format '{prefix}' gcc@11) && \
 		touch $@
 
-spack.lock: spack.yaml register-compilers
+spack.lock: spack.yaml update-config
 	$(SPACK) -e . concretize -f
 
 install.Makefile: spack.lock
@@ -18,5 +17,5 @@ install: install.Makefile
 	$(MAKE) -f install.Makefile
 
 clean:
-	$(MAKE) -f install.Makefile clean
-	rm -rf -- register-compilers spack.lock .spack-env install.Makefile
+	if [ -f install.Makefile ]; then $(MAKE) -f install.Makefile clean; fi
+	rm -rf -- update-config spack.lock .spack-env install.Makefile
