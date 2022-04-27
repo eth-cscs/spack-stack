@@ -19,20 +19,20 @@ unique features:
 
 A few variables can be set in `Make.user`:
 
-- `STORE`: spack install location;
-- `SPACK`: path to `spack`;
-- `SPACK_JOBS`: maximum number of jobs per spack package install.
+- `STORE`: where to install packages;
+- `SPACK`: what `spack` to use;
+- `SPACK_INSTALL_FLAGS`: specify more install flags, like `--jobs 64`.
 
-To build packages in parallel with nice output, use the following flags:
+To build packages in parallel with nice output, use `-O` (requires make >= 4.0):
 
 ```
-make SPACK_COLOR=always -j<N> -O
+make -j<N> -O
 ```
 
 To build on a fast filesystem, use `bwrap`, for example:
 
 ```
-./bwrap.sh make SPACK_COLOR=always -j -O
+./bwrap.sh make -j<N> -O
 ```
 
 This allows you to map the directory `/dev/shm/$(STORE) -> $(STORE)`, so that the Spack
