@@ -1,9 +1,5 @@
 -include Make.user
 
-# compilers.yaml and packages.yaml
-SPACK_USER_CONFIG_PATH ?= $(CURDIR)/config
-export SPACK_USER_CONFIG_PATH
-
 .PHONY: all store clean
 
 all: store.tar.zst
