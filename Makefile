@@ -63,13 +63,15 @@ packages_nvhpc/spack.lock: packages_nvhpc/spack.yaml packages_nvhpc/update-confi
 packages_nvhpc/Makefile: packages_nvhpc/spack.lock
 	$(SPACK) -e ./packages_nvhpc env generate-makefile --target-prefix packages_nvhpc_deps > $@
 
-store.tar.zst: packages_gcc/all packages_nvhpc/all
+store.tar.zst: packages_gcc_deps/all packages_nvhpc_deps/all
 	tar --use-compress-program="$$(spack -e ./gcc find --format='{prefix}' zstd+programs | head -n1)/bin/zstd -T0" -cf $@ -C $(STORE) .
 
 # clean should run without rebuilding makefiles
 clean:
-	$(MAKE) -C gcc clean && $(MAKE) -C nvhpc clean && \
-	$(MAKE) -C packages_gcc clean && $(MAKE) -C packages_nvhpc clean
+	rm -rf -- gcc/update-config gcc/spack.lock gcc/Makefile gcc_deps \
+	          nvhpc/update-config nvhpc/spack.lock nvhpc/Makefile nvhpc_deps \
+	          packages_gcc/update-config packages_gcc/spack.lock packages_gcc/Makefile packages_gcc_deps \
+	          packages_nvhpc/update-config packages_nvhpc/spack.lock packages_nvhpc/Makefile packages_nvhpc_deps \
 
 ifeq (,$(filter clean,$(MAKECMDGOALS)))
 -include gcc/Makefile
