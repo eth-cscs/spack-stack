@@ -1,30 +1,79 @@
 -include Make.user
 
-# Propagate those variables to other other Makefiles
-export SPACK SPACK_JOBS STORE
+# compilers.yaml and packages.yaml
+SPACK_USER_CONFIG_PATH ?= $(CURDIR)/config
+export SPACK_USER_CONFIG_PATH
 
-.PHONY: all store gcc nvhpc packages_gcc packages_nvhpc store.tar.zst clean
+.PHONY: all store clean
 
 all: store.tar.zst
 
 store:
 	mkdir -p $(STORE)
 
-gcc: | store
-	$(MAKE) -C $@
+# Compiler GCC
+gcc/update-config: | store
+	$(SPACK) -e ./gcc config add config:install_tree:root:$(STORE) && \
+	$(SPACK) -e ./gcc compiler find && \
+	touch $@
 
-nvhpc: | gcc
-	$(MAKE) -C $@
+gcc/spack.lock: gcc/spack.yaml gcc/update-config
+	$(SPACK) -e ./gcc concretize -f
 
-packages_gcc: | gcc
-	$(MAKE) -C $@
+gcc/Makefile: gcc/spack.lock
+	$(SPACK) -e ./gcc env generate-makefile --target-prefix gcc_deps > $@
 
-packages_nvhpc: | nvhpc
-	$(MAKE) -C $@
+# Compiler NVHPC
+nvhpc/update-config: gcc_deps/all
+	$(SPACK) -e ./nvhpc config add config:install_tree:root:$(STORE) && \
+	$(SPACK) -e ./nvhpc compiler find \
+		"$$($(SPACK) -e ./gcc find --format '{prefix}' gcc@11)" && \
+	touch $@
 
-store.tar.zst: | packages_gcc packages_nvhpc
+nvhpc/spack.lock: nvhpc/spack.yaml nvhpc/update-config
+	$(SPACK) -e ./nvhpc concretize -f
+
+nvhpc/Makefile: nvhpc/spack.lock
+	$(SPACK) -e ./nvhpc env generate-makefile --target-prefix nvhpc_deps > $@
+
+## Packages GCC
+packages_gcc/update-config: gcc_deps/all
+	$(SPACK) -e ./packages_gcc config add config:install_tree:root:$(STORE) && \
+	$(SPACK) -e ./packages_gcc compiler find \
+		"$$($(SPACK) -e ./gcc find --format '{prefix}' gcc@11)" && \
+	touch $@
+
+packages_gcc/spack.lock: packages_gcc/spack.yaml packages_gcc/update-config
+	$(SPACK) -e ./packages_gcc concretize -f
+
+packages_gcc/Makefile: packages_gcc/spack.lock
+	$(SPACK) -e ./packages_gcc env generate-makefile --target-prefix packages_gcc_deps > $@
+
+## Packags NVHPC
+packages_nvhpc/update-config: gcc_deps/all nvhpc_deps/all
+	$(SPACK) -e ./packages_nvhpc config add config:install_tree:root:$(STORE) && \
+	$(SPACK) -e ./packages_nvhpc compiler find \
+		"$$($(SPACK) -e ./gcc find --format '{prefix}' gcc@11)" \
+		"$$(find "$$($(SPACK) -e ./nvhpc find --format '{prefix}' nvhpc)" -iname compilers -type d | head -n1 )/bin" && \
+	touch $@
+
+packages_nvhpc/spack.lock: packages_nvhpc/spack.yaml packages_nvhpc/update-config
+	$(SPACK) -e ./packages_nvhpc concretize -f
+
+packages_nvhpc/Makefile: packages_nvhpc/spack.lock
+	$(SPACK) -e ./packages_nvhpc env generate-makefile --target-prefix packages_nvhpc_deps > $@
+
+store.tar.zst: packages_gcc/all packages_nvhpc/all
 	tar --use-compress-program="$$(spack -e ./gcc find --format='{prefix}' zstd+programs | head -n1)/bin/zstd -T0" -cf $@ -C $(STORE) .
 
+# clean should run without rebuilding makefiles
 clean:
 	$(MAKE) -C gcc clean && $(MAKE) -C nvhpc clean && \
 	$(MAKE) -C packages_gcc clean && $(MAKE) -C packages_nvhpc clean
+
+ifeq (,$(filter clean,$(MAKECMDGOALS)))
+-include gcc/Makefile
+-include nvhpc/Makefile
+-include packages_gcc/Makefile
+-include packages_nvhpc/Makefile
+endif
