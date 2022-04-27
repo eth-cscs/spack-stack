@@ -1,10 +1,10 @@
 # make variables
-STORE := /apps/manali/UES/store
 SPACK := spack
-SPACK_COLOR := always
+SPACK_INSTALL_FLAGS := -j64
+STORE := /apps/manali/UES/store
 
 # env variables
+SPACK_COLOR := always
 SPACK_USER_CONFIG_PATH := /apps/manali/UES/hstoppel/config
-SPACK_INSTALL_FLAGS := -j64
 
 export SPACK_COLOR SPACK_USER_CONFIG_PATH
