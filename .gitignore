@@ -5,4 +5,4 @@ spack.lock
 install
 tools/view
 update-config
-install.Makefile
+*/Makefile
