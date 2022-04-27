@@ -14,7 +14,6 @@ store:
 # Compiler GCC
 gcc/update-config: | store
 	$(SPACK) -e ./gcc config add config:install_tree:root:$(STORE) && \
-	$(SPACK) -e ./gcc compiler find && \
 	touch $@
 
 gcc/spack.lock: gcc/spack.yaml gcc/update-config

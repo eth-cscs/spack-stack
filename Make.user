@@ -1,3 +1,5 @@
-SPACK_JOBS := 64
 STORE := /apps/manali/UES/store
 SPACK := spack
+SPACK_USER_CONFIG_PATH := /apps/manali/UES/hstoppel/config
+SPACK_COLOR := always
+SPACK_INSTALL_FLAGS := -j64
