@@ -60,7 +60,7 @@ packages_nvhpc/Makefile: packages_nvhpc/spack.lock
 	$(SPACK) -e ./packages_nvhpc env generate-makefile --target-prefix packages_nvhpc_deps > $@
 
 store.tar.zst: packages_gcc_deps/all packages_nvhpc_deps/all
-	tar --use-compress-program="$$(spack -e ./gcc find --format='{prefix}' zstd+programs | head -n1)/bin/zstd -T0" -cf $@ -C $(STORE) .
+	tar --totals --use-compress-program="$$(spack -e ./gcc find --format='{prefix}' zstd+programs | head -n1)/bin/zstd -T0" -cf $@ -C $(STORE) .
 
 # clean should run without rebuilding makefiles
 clean:
