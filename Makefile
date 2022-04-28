@@ -17,7 +17,7 @@ gcc/spack.lock: gcc/spack.yaml gcc/update-config
 	$(SPACK) -e ./gcc concretize -f
 
 gcc/Makefile: gcc/spack.lock
-	$(SPACK) -e ./gcc env generate-makefile --target-prefix gcc_deps > $@
+	$(SPACK) -e ./gcc env depfile --make-target-prefix gcc_deps -o $@
 
 # Compiler NVHPC
 nvhpc/update-config: gcc_deps/env
@@ -30,7 +30,7 @@ nvhpc/spack.lock: nvhpc/spack.yaml nvhpc/update-config
 	$(SPACK) -e ./nvhpc concretize -f
 
 nvhpc/Makefile: nvhpc/spack.lock
-	$(SPACK) -e ./nvhpc env generate-makefile --target-prefix nvhpc_deps > $@
+	$(SPACK) -e ./nvhpc env depfile --make-target-prefix nvhpc_deps -o $@
 
 ## Packages GCC
 packages_gcc/update-config: gcc_deps/env
@@ -43,7 +43,7 @@ packages_gcc/spack.lock: packages_gcc/spack.yaml packages_gcc/update-config
 	$(SPACK) -e ./packages_gcc concretize -f
 
 packages_gcc/Makefile: packages_gcc/spack.lock
-	$(SPACK) -e ./packages_gcc env generate-makefile --target-prefix packages_gcc_deps > $@
+	$(SPACK) -e ./packages_gcc env depfile --make-target-prefix packages_gcc_deps -o $@
 
 ## Packags NVHPC
 packages_nvhpc/update-config: gcc_deps/env nvhpc_deps/env
@@ -57,7 +57,7 @@ packages_nvhpc/spack.lock: packages_nvhpc/spack.yaml packages_nvhpc/update-confi
 	$(SPACK) -e ./packages_nvhpc concretize -f
 
 packages_nvhpc/Makefile: packages_nvhpc/spack.lock
-	$(SPACK) -e ./packages_nvhpc env generate-makefile --target-prefix packages_nvhpc_deps > $@
+	$(SPACK) -e ./packages_nvhpc env depfile --make-target-prefix packages_nvhpc_deps -o $@
 
 store.tar.zst: packages_gcc_deps/env packages_nvhpc_deps/env
 	tar --totals --use-compress-program="$$(spack -e ./gcc find --format='{prefix}' zstd+programs | head -n1)/bin/zstd -T0" -cf $@ -C $(STORE) .
