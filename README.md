@@ -21,7 +21,7 @@ A few variables can be set in `Make.user`:
 
 - `STORE`: where to install packages;
 - `SPACK`: what `spack` to use;
-- `SPACK_INSTALL_FLAGS`: specify more install flags, like `--jobs 64`.
+- `SPACK_INSTALL_FLAGS`: specify more install flags, like `--verbose`.
 
 To build packages in parallel with nice output, use `-O` (requires GNU make >= 4.3):
 
