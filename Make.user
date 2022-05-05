@@ -1,6 +1,5 @@
 # make variables
 SPACK := spack
-SPACK_INSTALL_FLAGS := -j64
 STORE := /apps/manali/UES/store
 
 # env variables
