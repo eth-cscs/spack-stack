@@ -7,9 +7,7 @@ unique features:
 
 **Requirements**:
 
-- `spack` with the following patches:
-  1. https://github.com/spack/spack/pull/30254
-  2. https://github.com/spack/spack/pull/30302
+- `spack`
 - `bwrap` (optionally)
 
 
