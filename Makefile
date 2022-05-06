@@ -2,7 +2,7 @@
 
 .PHONY: all store clean
 
-all: store.tar.zst
+all: store.tar.zst store.squashfs
 
 store:
 	mkdir -p $(STORE)
@@ -60,7 +60,10 @@ packages_nvhpc/Makefile: packages_nvhpc/spack.lock
 	$(SPACK) -e ./packages_nvhpc env depfile --make-target-prefix packages_nvhpc_deps -o $@
 
 store.tar.zst: packages_gcc_deps/env packages_nvhpc_deps/env
-	tar --totals --use-compress-program="$$(spack -e ./gcc find --format='{prefix}' zstd+programs | head -n1)/bin/zstd -T0" -cf $@ -C $(STORE) .
+	tar --totals --use-compress-program="$$($(SPACK) -e ./gcc find --format='{prefix}' zstd+programs | head -n1)/bin/zstd -T0" -cf $@ -C $(STORE) .
+
+store.squashfs: packages_gcc_deps/env packages_nvhpc_deps/env
+	"$$($(SPACK) -e ./gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root
 
 # clean should run without rebuilding makefiles
 clean:
