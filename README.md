@@ -13,7 +13,12 @@ unique features:
 
 **Usage**:
 
-`make` builds a tarball `store.tar.zst` with all compilers and the software stack.
+Run `make -j$(nproc)`, it outputs two files:
+- `store.tar.zst`: a ZStandard compressed tarball of the software stack;
+- `store.squashfs`: a SquashFS file of the software stack.
+
+Installing the software stack can be done by extracting the tarball or mounting the
+SquashFS file at the `STORE` location.
 
 A few variables can be set in `Make.user`:
 
