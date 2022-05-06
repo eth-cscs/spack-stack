@@ -10,7 +10,7 @@ store:
 # Compiler GCC
 gcc/update-config: | store
 	$(SPACK) -e ./gcc config add config:install_tree:root:$(STORE) && \
-	$(SPACK) -e ./gcc external find perl m4 autoconf automake libtool gawk && \
+	$(SPACK) -e ./gcc external find perl m4 autoconf automake libtool gawk libfuse && \
 	touch $@
 
 gcc/spack.lock: gcc/spack.yaml gcc/update-config
