@@ -1,4 +1,5 @@
 *.tar.zst
+*.squashfs
 .spack-env
 ._view
 spack.lock
