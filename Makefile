@@ -59,7 +59,7 @@ include gcc/Makefile
 ifneq (,$(wildcard gcc/Makefile))
 include nvhpc/Makefile
 endif
-ifneq (,$(wildcard packages_gcc/Makefile))
+ifneq (,$(wildcard gcc/Makefile))
 include packages_gcc/Makefile
 endif
 ifneq (,$(wildcard nvhpc/Makefile))
