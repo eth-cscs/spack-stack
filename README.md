@@ -40,3 +40,29 @@ To build on a fast filesystem, use `bwrap`, for example:
 
 This allows you to map the directory `/dev/shm/$(STORE) -> $(STORE)`, so that the Spack
 install directory is fast.
+
+**Generating modules**
+
+There's no `modules.yaml` file right now, but generating modules goes along those lines:
+
+```yaml
+modules:
+  'default:':
+    arch_folder: false
+    roots:
+      tcl: /apps/manali/UES/store-modules
+    enable:
+    - tcl
+    tcl:
+      projections:
+        all: '{name}/{version}-{compiler.name}-{compiler.version}'
+      all:
+        autoload: none
+        filter:
+          environment_blacklist: ['LD_LIBRARY_PATH', 'LIBRARY_PATH', 'CPATH']
+```
+
+```
+spack module tcl refresh
+spack module tcl setdefault gcc@11
+```
