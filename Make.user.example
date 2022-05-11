@@ -1,0 +1,21 @@
+# vim: filetype=make
+
+# Copy this file to Make.user and set some variables.
+
+# Absolute path of the current Makefile
+MAKEFILE_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+
+# What Spack should we use?
+SPACK := spack
+
+# The Spack installation root.
+STORE := /some/path
+
+# Makes sure that make -Orecurse continues to print in color.
+SPACK_COLOR := always
+
+# Look for compilers.yaml / packages.yaml in this directory. 
+SPACK_USER_CONFIG_PATH := $(MAKEFILE_DIR)/config
+
+# These should be environment variables for Spack.
+export SPACK_COLOR SPACK_USER_CONFIG_PATH

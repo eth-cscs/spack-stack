@@ -1,9 +1,0 @@
-# make variables
-SPACK := spack
-STORE := /apps/manali/UES/store
-
-# env variables
-SPACK_COLOR := always
-SPACK_USER_CONFIG_PATH := /apps/manali/UES/hstoppel/config
-
-export SPACK_COLOR SPACK_USER_CONFIG_PATH

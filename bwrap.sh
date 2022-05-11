@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# Put spack in the path
-export PATH="/dev/shm/spack/bin:$PATH"
+# Simple wrapper around bwrap that:
+# 1. binds `/dev/shm/apps` to `/apps` for faster builds
+# 2. always uses a fresh /tmp dir (to allow concurrent cuda/mkl installs)
 
 mkdir -p /dev/shm/apps
 

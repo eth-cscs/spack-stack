@@ -7,3 +7,4 @@ install
 tools/view
 update-config
 */Makefile
+Make.user
