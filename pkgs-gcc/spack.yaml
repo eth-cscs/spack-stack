@@ -1,6 +1,7 @@
 spack:
   concretization: together
   specs:
+  - eccodes +tools +fortran +aec +openmp jp2k=jasper
   - netcdf-fortran
   - osu-micro-benchmarks +cuda cuda_arch=80
   - openmpi@4.0:4 +cuda +cxx +pmi +pmix schedulers=slurm fabrics=ucx
