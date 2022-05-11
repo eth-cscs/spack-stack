@@ -2,6 +2,8 @@
 
 SPACK ?= spack
 
+SPACK_ENV = $(SPACK) -e $(dir $@)
+
 ifndef STORE
 $(error STORE should point to a Spack install root)
 endif
@@ -18,33 +20,33 @@ all_locks: gcc/spack.lock nvhpc/spack.lock pkgs-gcc/spack.lock pkgs-nvhpc/spack.
 
 # Concretization
 %/spack.lock: %/spack.yaml %/update-config
-	$(SPACK) -e $(dir $@) concretize -f
+	$(SPACK_ENV) concretize -f
 
 # Generate Makefiles for the environment install
 %/Makefile: %/spack.lock
-	$(SPACK) -e $(dir $@) env depfile --make-target-prefix $*/generated -o $@
+	$(SPACK_ENV) env depfile --make-target-prefix $*/generated -o $@
 
 # Update environment config (set install_root, detect packages, set compilers)
 gcc/update-config: | store
-	$(SPACK) -e $(dir $@) config add config:install_tree:root:$(STORE) && \
-	$(SPACK) -e $(dir $@) external find perl m4 autoconf automake libtool gawk libfuse && \
+	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
+	$(SPACK_ENV) external find perl m4 autoconf automake libtool gawk libfuse && \
 	touch $@
 
 nvhpc/update-config: gcc/generated/env | store
-	$(SPACK) -e $(dir $@) config add config:install_tree:root:$(STORE) && \
-	$(SPACK) -e $(dir $@) compiler find \
+	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
+	$(SPACK_ENV) compiler find \
 		"$$($(SPACK) -e ./gcc find --format '{prefix}' gcc@11)" && \
 	touch $@
 
 pkgs-gcc/update-config: gcc/generated/env | store
-	$(SPACK) -e $(dir $@) config add config:install_tree:root:$(STORE) && \
-	$(SPACK) -e $(dir $@) compiler find \
+	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
+	$(SPACK_ENV) compiler find \
 		"$$($(SPACK) -e ./gcc find --format '{prefix}' gcc@11)" && \
 	touch $@
 
 pkgs-nvhpc/update-config: gcc/generated/env nvhpc/generated/env | store
-	$(SPACK) -e $(dir $@) config add config:install_tree:root:$(STORE) && \
-	$(SPACK) -e $(dir $@) compiler find \
+	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
+	$(SPACK_ENV) compiler find \
 		"$$($(SPACK) -e ./gcc find --format '{prefix}' gcc@11)" \
 		"$$(find "$$($(SPACK) -e ./nvhpc find --format '{prefix}' nvhpc)" -iname compilers -type d | head -n1 )/bin" && \
 	touch $@

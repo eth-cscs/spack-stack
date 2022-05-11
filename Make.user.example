@@ -12,10 +12,7 @@ SPACK := spack
 STORE := /some/path
 
 # Makes sure that make -Orecurse continues to print in color.
-SPACK_COLOR := always
+export SPACK_COLOR := always
 
 # Look for compilers.yaml / packages.yaml in this directory. 
-SPACK_USER_CONFIG_PATH := $(MAKEFILE_DIR)/config
-
-# These should be environment variables for Spack.
-export SPACK_COLOR SPACK_USER_CONFIG_PATH
+export SPACK_USER_CONFIG_PATH := $(MAKEFILE_DIR)/config
