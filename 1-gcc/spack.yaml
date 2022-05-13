@@ -1,6 +1,6 @@
 spack:
   specs:
-  - gcc@:11
+  - gcc@:11 languages=c,c++
   view: false
   packages:
     gcc:
