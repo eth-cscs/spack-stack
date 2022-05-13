@@ -16,7 +16,7 @@ store:
 	mkdir -p $(STORE)
 
 # Make sure spack.lock files are never removed as intermediate files...
-all_locks: gcc/spack.lock nvhpc/spack.lock pkgs-gcc/spack.lock pkgs-nvhpc/spack.lock
+all_locks: 1-gcc/spack.lock 2-gcc/spack.lock 3-tools/spack.lock 4-nvhpc/spack.lock 5-pkgs-gcc/spack.lock 6-pkgs-nvhpc/spack.lock
 
 # Concretization
 %/spack.lock: %/spack.yaml %/update-config
@@ -27,36 +27,46 @@ all_locks: gcc/spack.lock nvhpc/spack.lock pkgs-gcc/spack.lock pkgs-nvhpc/spack.
 	$(SPACK_ENV) env depfile --make-target-prefix $*/generated -o $@
 
 # Update environment config (set install_root, detect packages, set compilers)
-gcc/update-config: | store
+1-gcc/update-config: | store
 	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
 	$(SPACK_ENV) external find perl m4 autoconf automake libtool gawk libfuse && \
 	touch $@
 
-nvhpc/update-config: gcc/generated/env | store
+2-gcc/update-config: 1-gcc/generated/env | store
 	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
-	$(SPACK_ENV) compiler find \
-		"$$($(SPACK) -e ./gcc find --format '{prefix}' gcc@11)" && \
+	$(SPACK_ENV) external find perl m4 autoconf automake libtool gawk libfuse && \
+	$(SPACK_ENV) compiler find "$$($(SPACK) -e ./1-gcc find --format '{prefix}' gcc@11)" && \
 	touch $@
 
-pkgs-gcc/update-config: gcc/generated/env | store
+3-tools/update-config: 2-gcc/generated/env | store
 	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
-	$(SPACK_ENV) compiler find \
-		"$$($(SPACK) -e ./gcc find --format '{prefix}' gcc@11)" && \
+	$(SPACK_ENV) external find perl m4 autoconf automake libtool gawk libfuse && \
+	$(SPACK_ENV) compiler find "$$($(SPACK) -e ./2-gcc find --format '{prefix}' gcc@11)" && \
 	touch $@
 
-pkgs-nvhpc/update-config: gcc/generated/env nvhpc/generated/env | store
+4-nvhpc/update-config: 2-gcc/generated/env | store
+	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
+	$(SPACK_ENV) compiler find "$$($(SPACK) -e ./2-gcc find --format '{prefix}' gcc@11)" && \
+	touch $@
+
+5-pkgs-gcc/update-config: 2-gcc/generated/env | store
+	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
+	$(SPACK_ENV) compiler find "$$($(SPACK) -e ./2-gcc find --format '{prefix}' gcc@11)" && \
+	touch $@
+
+6-pkgs-nvhpc/update-config: 2-gcc/generated/env 4-nvhpc/generated/env | store
 	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
 	$(SPACK_ENV) compiler find \
-		"$$($(SPACK) -e ./gcc find --format '{prefix}' gcc@11)" \
-		"$$(find "$$($(SPACK) -e ./nvhpc find --format '{prefix}' nvhpc)" -iname compilers -type d | head -n1 )/bin" && \
+		"$$($(SPACK) -e ./2-gcc find --format '{prefix}' gcc@11)" \
+		"$$(find "$$($(SPACK) -e ./4-nvhpc find --format '{prefix}' nvhpc)" -iname compilers -type d | head -n1 )/bin" && \
 	touch $@
 
 # Generate tarball/squashfs files
-store.tar.zst: pkgs-gcc/generated/env pkgs-nvhpc/generated/env
-	tar --totals --use-compress-program="$$($(SPACK) -e ./gcc find --format='{prefix}' zstd+programs | head -n1)/bin/zstd -15 -T0" -cf $@ -C $(STORE) .
+store.tar.zst: 3-tools/generated/env 5-pkgs-gcc/generated/env 6-pkgs-nvhpc/generated/env
+	tar --totals --use-compress-program="$$($(SPACK) -e ./3-tools find --format='{prefix}' zstd+programs | head -n1)/bin/zstd -15 -T0" -cf $@ -C $(STORE) .
 
-store.squashfs: pkgs-gcc/generated/env pkgs-nvhpc/generated/env
-	"$$($(SPACK) -e ./gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend
+store.squashfs: 3-tools/generated/env 5-pkgs-gcc/generated/env 6-pkgs-nvhpc/generated/env
+	"$$($(SPACK) -e ./3-tools find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend
 
 # Clean (todo: maybe call clean targets of included makefiles?)
 clean:
@@ -65,14 +75,16 @@ clean:
 # Include Makefiles for environment installs; I can't really specify an include order /
 # force a restart of make, so the if's here impose an include order, which is hacky).
 ifeq (,$(filter clean,$(MAKECMDGOALS)))
-include gcc/Makefile
-ifneq (,$(wildcard gcc/Makefile))
-include nvhpc/Makefile
+include 1-gcc/Makefile
+ifneq (,$(wildcard 1-gcc/Makefile))
+include 2-gcc/Makefile
 endif
-ifneq (,$(wildcard gcc/Makefile))
-include pkgs-gcc/Makefile
+ifneq (,$(wildcard 2-gcc/Makefile))
+include 3-tools/Makefile
+include 4-nvhpc/Makefile
+include 5-pkgs-gcc/Makefile
 endif
-ifneq (,$(wildcard nvhpc/Makefile))
-include pkgs-nvhpc/Makefile
+ifneq (,$(wildcard 4-nvhpc/Makefile))
+include 6-pkgs-nvhpc/Makefile
 endif
 endif
