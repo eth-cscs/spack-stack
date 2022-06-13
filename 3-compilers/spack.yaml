@@ -1,7 +1,7 @@
 spack:
   specs:
   - nvhpc~blas~lapack~mpi
-  - llvm@14+clang
-  - llvm@13+clang
+  - llvm@14+clang ^ninja@kitware
+  - llvm@13+clang ^ninja@kitware
   view: false
   'compilers:': []
