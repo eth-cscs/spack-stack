@@ -29,7 +29,7 @@ all_locks: 1-gcc/spack.lock 2-gcc/spack.lock 3-nvhpc/spack.lock 4-pkgs-gcc/spack
 # Update environment config (set install_root, detect packages, set compilers)
 1-gcc/update-config: | store
 	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
-	$(SPACK_ENV) external find perl m4 autoconf automake libtool gawk && \
+	$(SPACK_ENV) external find perl m4 autoconf automake libtool gawk libfuse && \
 	touch $@
 
 2-gcc/update-config: 1-gcc/generated/env | store
