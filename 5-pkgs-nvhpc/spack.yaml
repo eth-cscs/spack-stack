@@ -1,5 +1,6 @@
 spack:
-  concretization: together
+  concretizer:
+    unify: true
   specs:
   - eccodes%nvhpc +tools +fortran +aec +openmp jp2k=jasper
   - netcdf-fortran%nvhpc
