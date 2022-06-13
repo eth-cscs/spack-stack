@@ -16,7 +16,7 @@ store:
 	mkdir -p $(STORE)
 
 # Make sure spack.lock files are never removed as intermediate files...
-all_locks: 1-gcc/spack.lock 2-gcc/spack.lock 3-nvhpc/spack.lock 4-pkgs-gcc/spack.lock 5-pkgs-nvhpc/spack.lock
+all_locks: 1-gcc/spack.lock 2-gcc/spack.lock 3-compilers/spack.lock 4-pkgs-gcc/spack.lock 5-pkgs-nvhpc/spack.lock
 
 # Concretization
 %/spack.lock: %/spack.yaml %/update-config
@@ -38,7 +38,7 @@ all_locks: 1-gcc/spack.lock 2-gcc/spack.lock 3-nvhpc/spack.lock 4-pkgs-gcc/spack
 	$(SPACK_ENV) compiler find "$$($(SPACK) -e ./1-gcc find --format '{prefix}' gcc@11)" && \
 	touch $@
 
-3-nvhpc/update-config: 2-gcc/generated/env | store
+3-compilers/update-config: 2-gcc/generated/env | store
 	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
 	$(SPACK_ENV) compiler find "$$($(SPACK) -e ./2-gcc find --format '{prefix}' gcc@11)" && \
 	touch $@
@@ -48,11 +48,11 @@ all_locks: 1-gcc/spack.lock 2-gcc/spack.lock 3-nvhpc/spack.lock 4-pkgs-gcc/spack
 	$(SPACK_ENV) compiler find "$$($(SPACK) -e ./2-gcc find --format '{prefix}' gcc@11)" && \
 	touch $@
 
-5-pkgs-nvhpc/update-config: 2-gcc/generated/env 3-nvhpc/generated/env | store
+5-pkgs-nvhpc/update-config: 2-gcc/generated/env 3-compilers/generated/env | store
 	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
 	$(SPACK_ENV) compiler find \
 		"$$($(SPACK) -e ./2-gcc find --format '{prefix}' gcc@11)" \
-		"$$(find "$$($(SPACK) -e ./3-nvhpc find --format '{prefix}' nvhpc)" -iname compilers -type d | head -n1 )/bin" && \
+		"$$(find "$$($(SPACK) -e ./3-compilers find --format '{prefix}' nvhpc)" -iname compilers -type d | head -n1 )/bin" && \
 	touch $@
 
 # Generate tarball/squashfs files
@@ -74,10 +74,10 @@ ifneq (,$(wildcard 1-gcc/Makefile))
 include 2-gcc/Makefile
 endif
 ifneq (,$(wildcard 2-gcc/Makefile))
-include 3-nvhpc/Makefile
+include 3-compilers/Makefile
 include 4-pkgs-gcc/Makefile
 endif
-ifneq (,$(wildcard 3-nvhpc/Makefile))
+ifneq (,$(wildcard 3-compilers/Makefile))
 include 5-pkgs-nvhpc/Makefile
 endif
 endif
