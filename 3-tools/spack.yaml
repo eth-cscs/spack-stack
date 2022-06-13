@@ -1,7 +1,0 @@
-spack:
-  specs:
-  - squashfuse +zstd
-  - squashfs default_compression=zstd
-  - zstd +programs compression=none
-  view: false
-  'compilers:': []

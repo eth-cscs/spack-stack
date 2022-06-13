@@ -1,0 +1,7 @@
+spack:
+  specs:
+  - nvhpc~blas~lapack~mpi
+  - llvm@14+clang
+  - llvm@13+clang
+  view: false
+  'compilers:': []
