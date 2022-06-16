@@ -27,7 +27,7 @@ A few variables can be set in `Make.user`:
 - `STORE`: where to install packages;
 - `SPACK`: what `spack` to use;
 - `SPACK_INSTALL_FLAGS`: specify more install flags, like `--verbose`.
-- `BWRAP`: by default used to have a pristine `/tmp` folder, since some packages (cuda toolkit, mkl) write a "lock" to `/tmp` and don't allow simultaneous installs, which is not an issue with Spack. This can also be used to bind `/dev/shm/$(STORE)` to `$(STORE)`, so that the entire build is on a fast filesystem.
+- `BWRAP`: how to use bubblewrap. By default used to setup a pristine `/tmp` folder, since some packages (cuda toolkit, mkl) write a "lock" to `/tmp` and don't allow simultaneous installs, which is not an issue with Spack. This can also be used to bind `/dev/shm/$(STORE)` to `$(STORE)`, so that the entire build is on a fast filesystem. To disable bubblewrap set `BWRAP:=`.
 
 To build packages in parallel with nice output, use `-O` (requires GNU make >= 4.3):
 
