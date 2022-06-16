@@ -6,5 +6,5 @@ spack.lock
 install
 tools/view
 update-config
-*/Makefile
+*/*/Makefile
 Make.user
