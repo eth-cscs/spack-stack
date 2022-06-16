@@ -1,9 +1,11 @@
 -include ../Make.user
 
+.PHONY: all .locks
+
 all: 3-llvm/generated/env
 
 # Make sure spack.lock files are never removed as intermediate files...
-all_locks: 1-gcc/spack.lock 2-gcc/spack.lock 3-llvm/spack.lock
+.locks: 1-gcc/spack.lock 2-gcc/spack.lock 3-llvm/spack.lock
 
 # Concretization
 %/spack.lock: %/spack.yaml %/update-config
