@@ -9,8 +9,8 @@ SPACK := spack
 STORE := /some/path
 
 # Build on a faster filesystem with bubblewrap if desired (assuming the STORE := /apps/something)
-# BWRAP := bwrap --dev-bind / / --tmpfs /tmp --bind "/dev/shm/apps" "/apps" "$@"
-BWRAP := bwrap --dev-bind / / --tmpfs /tmp
+# BWRAP := env -i PATH=/usr/bin:/bin bwrap --dev-bind / / --tmpfs /tmp --bind "/dev/shm/apps" "/apps"
+BWRAP := env -i PATH=/usr/bin:/bin bwrap --dev-bind / / --tmpfs /tmp
 
 # Makes sure that make -Orecurse continues to print in color.
 export SPACK_COLOR := always

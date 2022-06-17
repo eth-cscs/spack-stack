@@ -1,16 +1,16 @@
 -include Make.user
 
-include Make.inc
-
 .PHONY: compilers packages clean
 
-all: store.tar.zst store.squashfs
+all: packages
 
 compilers:
 	$(BWRAP) $(MAKE) -C compilers
 
 packages: compilers
 	$(BWRAP) $(MAKE) -C packages
+
+include Make.inc
 
 # TODO: bring back "install" type of target.
 # # Generate tarball/squashfs files
