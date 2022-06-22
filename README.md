@@ -13,7 +13,7 @@ unique features:
 **Usage**:
 
 1. Copy `Make.user.example` to `Make.user` and possibly change some variables.
-2. Run `make -j$(nproc)`
+2. Run `env -i PATH=/usr/bin:/bin make -j$(nproc)`
 
 This outputs two files:
 - `store.tar.zst`: a ZStandard compressed tarball of the software stack;
@@ -32,7 +32,7 @@ A few variables can be set in `Make.user`:
 To build packages in parallel with nice output, use `-O` (requires GNU make >= 4.3):
 
 ```console
-make -j<N> -Orecurse
+env -i PATH=/usr/bin:/bin make -j<N> -Orecurse
 ```
 
 **Generating modules**
