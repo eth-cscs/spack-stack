@@ -12,13 +12,10 @@ packages: compilers
 
 include Make.inc
 
-# TODO: bring back "install" type of target.
-# # Generate tarball/squashfs files
-# store.tar.zst: 1-gcc/generated/env 4-pkgs-gcc/generated/env 5-pkgs-nvhpc/generated/env
-# 	tar --totals --use-compress-program="$$($(SPACK) -e ./1-gcc find --format='{prefix}' zstd+programs | head -n1)/bin/zstd -15 -T0" -cf $@ -C $(STORE) .
-
-# store.squashfs: 1-gcc/generated/env 4-pkgs-gcc/generated/env 5-pkgs-nvhpc/generated/env
-# 	"$$($(SPACK) -e ./1-gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend
+store.squashfs: compilers
+	echo -n /spack-store > $@ && \
+	dd if=/dev/null of=$@ obs=4K seek=1 status=none && \
+	$(BWRAP) "$$($(BWRAP) $(SPACK) -e ./compilers/1-gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend -o 4K
 
 # Clean (todo: maybe call clean targets of included makefiles?)
 clean:
