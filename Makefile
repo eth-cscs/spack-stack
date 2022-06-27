@@ -13,9 +13,9 @@ packages: compilers
 include Make.inc
 
 store.squashfs: compilers
-	echo -n /spack-store > $@ && \
-	dd if=/dev/null of=$@ obs=4K seek=1 status=none && \
-	$(BWRAP) "$$($(BWRAP) $(SPACK) -e ./compilers/1-gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend -o 4K
+	$(BWRAP) "$$($(BWRAP) $(SPACK) -e ./compilers/1-gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend -o 4096 && \
+	dd if=/dev/zero of=$@ conv=notrunc count=8 && \
+	echo -n $(STORE) | dd of=$@ conv=notrunc
 
 # Clean (todo: maybe call clean targets of included makefiles?)
 clean:
