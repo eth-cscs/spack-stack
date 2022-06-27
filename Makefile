@@ -13,7 +13,7 @@ packages: compilers
 include Make.inc
 
 store.squashfs: compilers
-	$(BWRAP) "$$($(BWRAP) $(SPACK) -e ./compilers/1-gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend -o 4096 && \
+	$(BWRAP) "$$($(BWRAP) $(SPACK) -e ./compilers/1-gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend -offset 4096 && \
 	dd if=/dev/zero of=$@ conv=notrunc count=8 && \
 	echo -n $(STORE) | dd of=$@ conv=notrunc
 
