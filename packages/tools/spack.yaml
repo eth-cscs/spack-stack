@@ -14,6 +14,7 @@ spack:
   - libtree
   - git
   - tmux
+  - tree
   view: false
   packages:
     all:
