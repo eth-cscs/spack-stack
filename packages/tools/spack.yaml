@@ -13,6 +13,7 @@ spack:
   - emacs
   - libtree
   - git
+  - tmux
   view: false
   packages:
     all:
