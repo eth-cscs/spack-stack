@@ -16,10 +16,11 @@ spack:
   - tmux
   - tree
   - tar
-  - fd
-  - ripgrep
-  - hyperfine
-  - bat
+  - squashfs +gzip +lz4 +lzo +xz +zstd
+  #- fd
+  #- ripgrep
+  #- hyperfine
+  #- bat
   view: false
   packages:
     all:
