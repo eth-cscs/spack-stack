@@ -2,7 +2,7 @@
 
 .PHONY: all .locks
 
-all: gcc/generated/env nvhpc/generated/env
+all: gcc/generated/env nvhpc/generated/env tools/generated/env
 
 # Make sure spack.lock files are never removed as intermediate files...
 .locks: gcc/spack.lock nvhpc/spack.lock tools/spack.lock
