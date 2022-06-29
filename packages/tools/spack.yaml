@@ -15,6 +15,11 @@ spack:
   - git
   - tmux
   - tree
+  - tar
+  - fd
+  - ripgrep
+  - hyperfine
+  - bat
   view: false
   packages:
     all:
