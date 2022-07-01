@@ -9,7 +9,7 @@ SPACK := spack
 STORE := /user-environment
 
 # Build in memory on /dev/shm/store, but bind it to /user-environment.
-BWRAP = $(CURDIR)/bwrap-mutable-root.sh --tmpfs /tmp --tmps ~ --bind /dev/shm/store $(STORE)
+BWRAP = $(CURDIR)/bwrap-mutable-root.sh --tmpfs /tmp --tmpfs ~ --bind /dev/shm/store $(STORE)
 
 # Makes sure that make -Orecurse continues to print in color.
 export SPACK_COLOR := always
