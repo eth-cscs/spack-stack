@@ -1,5 +1,5 @@
-Bootstrap GCC and NVHPC, and build an HPC software stack based on OpenMPI, with a few
-unique features:
+Bootstrap GCC, LLVM and NVHPC, and build an HPC software stack based on
+OpenMPI, with a few unique features:
 
 1. parallel package builds with single jobserver for all builds;
 2. building on a fast filesystem, targeting a slower filesystem, without worrying
@@ -8,32 +8,33 @@ unique features:
 **Requirements**:
 
 - `spack`
-- `bwrap` (optionally)
+- `bwrap`
 
 **Usage**:
 
 1. Copy `Make.user.example` to `Make.user` and possibly change some variables.
-2. Run `env -i PATH=/usr/bin:/bin make -j$(nproc)`
+2. Run `make -j$(nproc)` to bootstrap compilers and packages.
+3. Run `make store.squashfs` to bundle those in a squashfs file.
 
-This outputs two files:
-- `store.tar.zst`: a ZStandard compressed tarball of the software stack;
-- `store.squashfs`: a SquashFS file of the software stack.
-
-Installing the software stack can be done by extracting the tarball or mounting the
-SquashFS file at the `STORE` location.
+The squashfs file can then be mounted using [squashfs-mount](https://github.com/eth-cscs/squashfs-mount).
 
 A few variables can be set in `Make.user`:
 
 - `STORE`: where to install packages;
 - `SPACK`: what `spack` to use;
 - `SPACK_INSTALL_FLAGS`: specify more install flags, like `--verbose`.
-- `BWRAP`: how to use bubblewrap. By default used to setup a pristine `/tmp` folder, since some packages (cuda toolkit, mkl) write a "lock" to `/tmp` and don't allow simultaneous installs, which is not an issue with Spack. This can also be used to bind `/dev/shm/$(STORE)` to `$(STORE)`, so that the entire build is on a fast filesystem. To disable bubblewrap set `BWRAP:=`.
+- `BWRAP`: how to use bubblewrap. By default hides the `/tmp` and home folder.
+  This can also be used to bind `/dev/shm/$(STORE)` to `$(STORE)`, so that the
+  entire build is on a fast filesystem. To disable bubblewrap set `BWRAP:=`.
 
 To build packages in parallel with nice output, use `-O` (requires GNU make >= 4.3):
 
 ```console
-env -i PATH=/usr/bin:/bin make -j<N> -Orecurse
+make -j<N> -Orecurse
 ```
+
+For reproducibility, it's useful to prefix make commands with `env -i
+PATH=/usr/bin:/bin ...`.
 
 **Generating modules**
 
