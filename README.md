@@ -2,8 +2,8 @@ Bootstrap GCC, LLVM and NVHPC, and build an HPC software stack based on
 OpenMPI, with a few unique features:
 
 1. parallel package builds with single jobserver for all builds;
-2. building on a fast filesystem, targeting a slower filesystem, without worrying
-   about relocation issues.
+2. avoiding relocation issues by fixing the install path to a new directory `/some-dir` of choice (no root access required);
+3. fast, in-memory builds.
 
 **Requirements**:
 
