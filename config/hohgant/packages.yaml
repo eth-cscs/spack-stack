@@ -1,6 +1,4 @@
 packages:
-  openssl:
-    variants: [certs=mozilla]
   slurm:
     buildable: false
     externals:
