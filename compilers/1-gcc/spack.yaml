@@ -5,6 +5,8 @@ spack:
   - squashfs default_compression=zstd
   - zstd +programs compression=none
   view: false
+  concretizer:
+    unify: true
   packages:
     gcc:
       variants: [build_type=Release ~bootstrap +strip]
