@@ -14,5 +14,9 @@ BWRAP = $(CURDIR)/bwrap-mutable-root.sh --tmpfs /tmp --tmpfs ~ --bind /dev/shm/s
 # Makes sure that make -Orecurse continues to print in color.
 export SPACK_COLOR := always
 
+
 # Look for compilers.yaml / packages.yaml in this directory. 
 # export SPACK_USER_CONFIG_PATH := /path/to/config
+
+# Put clingo and friends here...
+# export SPACK_USER_CACHE_PATH := /path/to/cache

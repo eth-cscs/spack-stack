@@ -4,10 +4,14 @@
 
 all: packages
 
-compilers:
+bootstrap:
+	@echo Making sure Spack is properly bootstrapped...
+	$(BWRAP) $(SPACK) spec zlib > /dev/null
+
+compilers: | bootstrap
 	$(BWRAP) $(MAKE) -C compilers
 
-packages: compilers
+packages: compilers | bootstrap
 	$(BWRAP) $(MAKE) -C packages
 
 include Make.inc
