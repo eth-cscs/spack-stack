@@ -8,6 +8,10 @@ ifndef STORE
 $(error STORE should point to a Spack install root)
 endif
 
+ifeq ($(wildcard $(SPACK_USER_CONFIG_PATH)),)
+$(error SPACK_USER_CONFIG_PATH = "$(SPACK_USER_CONFIG_PATH)" doesn't point to an existing directory)
+endif
+
 store:
 	mkdir -p $(STORE)
 

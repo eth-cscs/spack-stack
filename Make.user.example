@@ -2,6 +2,9 @@
 
 # Copy this file to Make.user and set some variables.
 
+# This is the root of the software stack directory.
+SOFTWARE_STACK_PROJECT := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+
 # What Spack should we use?
 SPACK := spack
 
@@ -9,14 +12,13 @@ SPACK := spack
 STORE := /user-environment
 
 # Build in memory on /dev/shm/store, but bind it to /user-environment.
-BWRAP = $(CURDIR)/bwrap-mutable-root.sh --tmpfs /tmp --tmpfs ~ --bind /dev/shm/store $(STORE)
+BWRAP := $(SOFTWARE_STACK_PROJECT)/bwrap-mutable-root.sh --tmpfs /tmp --tmpfs ~ --bind /dev/shm/store $(STORE)
 
 # Makes sure that make -Orecurse continues to print in color.
 export SPACK_COLOR := always
 
-
 # Look for compilers.yaml / packages.yaml in this directory. 
-# export SPACK_USER_CONFIG_PATH := /path/to/config
+export SPACK_USER_CONFIG_PATH := $(SOFTWARE_STACK_PROJECT)/config/<name>
 
 # Put clingo and friends here...
-# export SPACK_USER_CACHE_PATH := /path/to/cache
+export SPACK_USER_CACHE_PATH := $(SOFTWARE_STACK_PROJECT)/cache
