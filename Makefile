@@ -17,9 +17,7 @@ packages: compilers | bootstrap
 include Make.inc
 
 store.squashfs: compilers
-	$(BWRAP) "$$($(BWRAP) $(SPACK) -e ./compilers/1-gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend -offset 4096 -Xcompression-level 3 && \
-	dd if=/dev/zero of=$@ conv=notrunc count=8 && \
-	echo -n $(STORE) | dd of=$@ conv=notrunc
+	$(BWRAP) "$$($(BWRAP) $(SPACK) -e ./compilers/1-gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend -Xcompression-level 3
 
 # Clean (todo: maybe call clean targets of included makefiles?)
 clean:
