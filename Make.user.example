@@ -23,5 +23,10 @@ export SPACK_USER_CONFIG_PATH := $(SOFTWARE_STACK_PROJECT)/config/<name>
 # Put clingo and friends here...
 export SPACK_USER_CACHE_PATH := $(SOFTWARE_STACK_PROJECT)/cache
 
+# Output the full build log to stdout.
+# export SPACK_INSTALL_FLAGS := --verbose
+
 # Reproducibility
-export LC_ALL=C TZ=UTC SOURCE_DATE_EPOCH=0
+export LC_ALL := C
+export TZ := UTC
+export SOURCE_DATE_EPOCH := 0
