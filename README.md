@@ -27,12 +27,6 @@ A few variables can be set in `Make.user`:
   This can also be used to bind `/dev/shm/$(STORE)` to `$(STORE)`, so that the
   entire build is on a fast filesystem. To disable bubblewrap set `BWRAP:=`.
 
-To build packages in parallel with nice output, use `-O` (requires GNU make >= 4.3):
-
-```console
-make -j<N> -Orecurse
-```
-
 For reproducibility, it's useful to prefix make commands with `env -i
 PATH=/usr/bin:/bin ...`.
 

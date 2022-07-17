@@ -1,5 +1,7 @@
 -include ../Make.user
 
+MAKEFLAGS += --output-sync=recurse
+
 .PHONY: all .locks
 
 all: 3-llvm/generated/env
