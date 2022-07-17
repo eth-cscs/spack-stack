@@ -22,3 +22,6 @@ export SPACK_USER_CONFIG_PATH := $(SOFTWARE_STACK_PROJECT)/config/<name>
 
 # Put clingo and friends here...
 export SPACK_USER_CACHE_PATH := $(SOFTWARE_STACK_PROJECT)/cache
+
+# Reproducibility
+export LC_ALL=C TZ=UTC SOURCE_DATE_EPOCH=0
