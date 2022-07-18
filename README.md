@@ -8,27 +8,28 @@ OpenMPI, with a few unique features:
 **Requirements**:
 
 - `spack`
-- `bwrap`
+- `bwrap` (when not already building inside a sandbox)
 
 **Usage**:
 
 1. Copy `Make.user.example` to `Make.user` and possibly change some variables.
-2. Run `make -j$(nproc)` to bootstrap compilers and packages.
+2. Run `make -j$(nproc)`\* to bootstrap compilers and packages.
 3. Run `make store.squashfs` to bundle those in a squashfs file.
 
-The squashfs file can then be mounted using [squashfs-mount](https://github.com/eth-cscs/squashfs-mount).
+\* For reproducibility, build with a clean environment: `env -i PATH=/usr/bin:/bin make ...`.
 
-A few variables can be set in `Make.user`:
+A few variables should be set in `Make.user`:
 
 - `STORE`: where to install packages;
 - `SPACK`: what `spack` to use;
+- `SPACK_USER_CONFIG_PATH`: path to spack config dir (e.g. [config/hohgant](config/hohgant)).
+- `BWRAP`: use bubblewrap for sandboxing and speed: see `Make.user.example` for
+  details.
 - `SPACK_INSTALL_FLAGS`: specify more install flags, like `--verbose`.
-- `BWRAP`: how to use bubblewrap. By default hides the `/tmp` and home folder.
-  This can also be used to bind `/dev/shm/$(STORE)` to `$(STORE)`, so that the
-  entire build is on a fast filesystem. To disable bubblewrap set `BWRAP:=`.
 
-For reproducibility, it's useful to prefix make commands with `env -i
-PATH=/usr/bin:/bin ...`.
+**Unprivileged mounts**
+
+The squashfs file can then be mounted using [squashfs-mount](https://github.com/eth-cscs/squashfs-mount) or `squashfuse`
 
 **Generating modules**
 
