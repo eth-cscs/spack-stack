@@ -29,4 +29,8 @@ export SPACK_USER_CACHE_PATH := $(SOFTWARE_STACK_PROJECT)/cache
 # Reproducibility
 export LC_ALL := C
 export TZ := UTC
-export SOURCE_DATE_EPOCH := 0
+
+# I tried UNIX epoch 0 here, but it results in build errors with Python
+# packages using wheels, since they rely on zipfiles, and zipfiles can only
+# handle DOS epoch, which is the magic number below (1980-01-01).
+export SOURCE_DATE_EPOCH := 315576060
