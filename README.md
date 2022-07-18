@@ -19,13 +19,11 @@ OpenMPI, with a few unique features:
 [^1]: For reproducibility, build with a clean environment: `env -i PATH=/usr/bin:/bin make ...`.
 
 [^2]: A few variables should be set in `Make.user`:
-
-- `STORE`: where to install packages;
-- `SPACK`: what `spack` to use;
-- `SPACK_USER_CONFIG_PATH`: path to spack config dir (e.g. [config/hohgant](config/hohgant)).
-- `BWRAP`: use bubblewrap for sandboxing and speed: see `Make.user.example` for
-  details.
-- `SPACK_INSTALL_FLAGS`: specify more install flags, like `--verbose`.
+    - `STORE`: where to install packages;
+    - `SPACK`: what `spack` to use;
+    - `SPACK_USER_CONFIG_PATH`: path to spack config dir (e.g. [config/hohgant](config/hohgant)).
+    - `BWRAP`: use bubblewrap for sandboxing and speed: see `Make.user.example` for details.
+    - `SPACK_INSTALL_FLAGS`: specify more install flags, like `--verbose`.
 
 **Unprivileged mounts**
 
@@ -56,3 +54,4 @@ modules:
 spack module tcl refresh
 spack module tcl setdefault gcc@11
 ```
+
