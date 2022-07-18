@@ -12,13 +12,13 @@ OpenMPI, with a few unique features:
 
 **Usage**:
 
-1. Copy `Make.user.example` to `Make.user` and possibly change some variables.
-2. Run `make -j$(nproc)`\* to bootstrap compilers and packages.
+1. Copy `Make.user.example` to `Make.user` and change some variables[^1].
+2. Run `make -j$(nproc)` to bootstrap compilers and packages[^2].
 3. Run `make store.squashfs` to bundle those in a squashfs file.
 
-\* For reproducibility, build with a clean environment: `env -i PATH=/usr/bin:/bin make ...`.
+[^1]: For reproducibility, build with a clean environment: `env -i PATH=/usr/bin:/bin make ...`.
 
-A few variables should be set in `Make.user`:
+[^2]: A few variables should be set in `Make.user`:
 
 - `STORE`: where to install packages;
 - `SPACK`: what `spack` to use;
