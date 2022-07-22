@@ -18,7 +18,7 @@ nvhpc/update-config: | store
 	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
 	$(SPACK_ENV) compiler find \
 		"$$($(SPACK) -e ../compilers/2-gcc find --format '{prefix}' gcc@11)" \
-		"$$(find "$$($(SPACK) -e ../compilers/3-llvm find --format '{prefix}' nvhpc)" -iname compilers -type d | head -n1 )/bin" && \
+		"$$(dirname $$(find "$$($(SPACK) -e ../compilers/3-llvm find --format '{prefix}' nvhpc)" -name nvfortran -type f) | head -n1 )" && \
 	touch $@
 
 tools/update-config: | store
