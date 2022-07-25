@@ -20,7 +20,7 @@ STORE := /user-environment
 # directory at the root /.
 BWRAP := $(SOFTWARE_STACK_PROJECT)/bwrap-mutable-root.sh $\
 	--tmpfs ~ $\
-	--bind $(SOFTWARE_STACK_PROJECT)/tmp $\
+	--bind $(SOFTWARE_STACK_PROJECT)/tmp /tmp $\
 	--bind $(SOFTWARE_STACK_PROJECT)/store $(STORE)
 
 # Makes sure that make -Orecurse continues to print in color.
