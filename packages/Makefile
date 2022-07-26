@@ -9,22 +9,21 @@ all: gcc/generated/env nvhpc/generated/env tools/generated/env
 # Make sure spack.lock files are never removed as intermediate files...
 .locks: gcc/spack.lock nvhpc/spack.lock tools/spack.lock
 
-gcc/update-config: | store
-	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
-	$(SPACK_ENV) compiler find "$$($(SPACK) -e ../compilers/2-gcc find --format '{prefix}' gcc@11)" && \
-	touch $@
+gcc/config.yaml nvhpc/config.yaml tools/config.yaml: | store
+	$(SPACK) config --scope=user add config:install_tree:root:$(STORE)
 
-nvhpc/update-config: | store
-	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
-	$(SPACK_ENV) compiler find \
+gcc/compilers.yaml:
+	$(SPACK) compiler find --scope=user \
+		"$$($(SPACK) -e ../compilers/2-gcc find --format '{prefix}' gcc@11)"
+
+nvhpc/compilers.yaml:
+	$(SPACK) compiler find --scope=user \
 		"$$($(SPACK) -e ../compilers/2-gcc find --format '{prefix}' gcc@11)" \
-		"$$(dirname $$(find "$$($(SPACK) -e ../compilers/3-llvm find --format '{prefix}' nvhpc)" -name nvfortran -type f) | head -n1 )" && \
-	touch $@
+		"$$(dirname $$(find "$$($(SPACK) -e ../compilers/3-llvm find --format '{prefix}' nvhpc)" -name nvfortran -type f) | head -n1 )"
 
-tools/update-config: | store
-	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
-	$(SPACK_ENV) compiler find "$$($(SPACK) -e ../compilers/2-gcc find --format '{prefix}' gcc@11)" && \
-	touch $@
+tools/compilers.yaml:
+	$(SPACK) compiler find --scope=user \
+		"$$($(SPACK) -e ../compilers/2-gcc find --format '{prefix}' gcc@11)"
 
 -include ../Make.inc
 

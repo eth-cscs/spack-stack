@@ -9,30 +9,19 @@ all: 3-llvm/generated/env
 # Make sure spack.lock files are never removed as intermediate files...
 .locks: 1-gcc/spack.lock 2-gcc/spack.lock 3-llvm/spack.lock
 
-# Concretization
-%/spack.lock: %/spack.yaml %/update-config
-	$(SPACK_ENV) concretize -f
+# Configure the install location.
+1-gcc/config.yaml 2-gcc/config.yaml 3-llvm/config.yaml: | store
+	$(SPACK) config --scope=user add config:install_tree:root:$(STORE)
 
-# Generate Makefiles for the environment install
-%/Makefile: %/spack.lock
-	$(SPACK_ENV) env depfile --make-target-prefix $*/generated -o $@
+# Detect some build-type packages.
+1-gcc/packages.yaml 2-gcc/packages.yaml:
+	$(SPACK) external find --scope=user perl m4 autoconf automake libtool gawk python
 
-# Update environment config (set install_root, detect packages, set compilers)
-1-gcc/update-config: | store
-	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
-	$(SPACK_ENV) external find perl m4 autoconf automake libtool gawk libfuse && \
-	touch $@
+2-gcc/compilers.yaml: 1-gcc/generated/env
+	$(SPACK) compiler find --scope=user "$$($(SPACK) -e ./1-gcc find --format '{prefix}' gcc@11)"
 
-2-gcc/update-config: 1-gcc/generated/env | store
-	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
-	$(SPACK_ENV) external find perl m4 autoconf automake libtool gawk python && \
-	$(SPACK_ENV) compiler find "$$($(SPACK) -e ./1-gcc find --format '{prefix}' gcc@11)" && \
-	touch $@
-
-3-llvm/update-config: 2-gcc/generated/env | store
-	$(SPACK_ENV) config add config:install_tree:root:$(STORE) && \
-	$(SPACK_ENV) compiler find "$$($(SPACK) -e ./2-gcc find --format '{prefix}' gcc@11)" && \
-	touch $@
+3-llvm/compilers.yaml: 2-gcc/generated/env
+	$(SPACK) compiler find --scope=user "$$($(SPACK) -e ./2-gcc find --format '{prefix}' gcc@11)"
 
 include ../Make.inc
 
