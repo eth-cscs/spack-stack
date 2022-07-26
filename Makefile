@@ -5,7 +5,7 @@
 all: packages
 
 bootstrap:
-	@echo Making sure Spack is properly bootstrapped...
+	$(info spack bootstrap...)
 	$(BWRAP) $(SPACK) spec zlib > /dev/null
 
 compilers: | bootstrap
