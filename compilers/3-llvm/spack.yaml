@@ -4,4 +4,3 @@ spack:
   - llvm@14+clang targets=x86,nvptx ~gold ^ninja@kitware
   - llvm@13+clang targets=x86,nvptx ~gold ^ninja@kitware
   view: false
-  'compilers:': []

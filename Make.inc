@@ -16,9 +16,14 @@ store:
 	mkdir -p $(STORE)
 
 # Concretization
-%/spack.lock: %/spack.yaml %/update-config
+%/spack.lock: %/spack.yaml %/compilers.yaml %/config.yaml %/packages.yaml
 	$(SPACK_ENV) concretize -f
 
 # Generate Makefiles for the environment install
 %/Makefile: %/spack.lock
 	$(SPACK_ENV) env depfile --make-target-prefix $*/generated -o $@
+
+# For generating {compilers,config,packages}.yaml files.
+%.yaml: export SPACK_USER_CONFIG_PATH=$(abspath $(dir $@))
+%.yaml:
+	touch $@
