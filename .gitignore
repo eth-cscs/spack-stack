@@ -8,3 +8,6 @@ tools/view
 update-config
 */*/Makefile
 Make.user
+./store/
+./tmp/
+./cache/
