@@ -26,8 +26,16 @@ BWRAP := $(SOFTWARE_STACK_PROJECT)/bwrap-mutable-root.sh $\
 # Makes sure that make -Orecurse continues to print in color.
 export SPACK_COLOR := always
 
-# Look for compilers.yaml / packages.yaml in this directory. 
-export SPACK_USER_CONFIG_PATH := $(SOFTWARE_STACK_PROJECT)/config/<name>
+# Do not use user config, cause more often than not you pick up the wrong
+# config files in ~/.spack. Note that our recommended bwrap setup already puts
+# a tmpfs in the home folder, but when bwrap isn't used, this also helps a bit
+# with reproducibility.
+export SPACK_USER_CONFIG_PATH := /dev/null
+
+# Set up the system config scope (replace <name> with the system name)
+# this should have the system packages we don't want build, for example
+# slurm, pmix, etc. Also should have the system compiler.
+export SPACK_SYSTEM_CONFIG_PATH := $(SOFTWARE_STACK_PROJECT)/config/<name>
 
 # Put clingo and friends here...
 export SPACK_USER_CACHE_PATH := $(SOFTWARE_STACK_PROJECT)/cache
