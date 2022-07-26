@@ -21,4 +21,5 @@ store.squashfs: compilers
 
 # Clean (todo: maybe call clean targets of included makefiles?)
 clean:
+	$(warning The following files may contain auto-generated config sections and are *not* cleaned: $(wildcard */*/spack.yaml). Consider running `git reset --hard` to reset those. (We should probably move that generated config into separate config.yaml, packages.yaml and compilers.yaml files instead of modifying spack.yaml, but aint nobody got time for that.)")
 	rm -rf -- $(wildcard */*/update-config) $(wildcard */*/spack.lock) $(wildcard */*/.spack-env) $(wildcard */*/Makefile) $(wildcard */*/generated) $(wildcard cache)
