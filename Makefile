@@ -1,6 +1,6 @@
 -include Make.user
 
-.PHONY: compilers packages clean
+.PHONY: compilers packages generate-config clean
 
 all: packages
 
@@ -9,13 +9,13 @@ bootstrap:
 	$(BWRAP) $(SPACK) spec zlib > /dev/null
 
 compilers: | bootstrap
-	$(BWRAP) $(MAKE) -C compilers
+	$(BWRAP) $(MAKE) -C $@
 
-$(STORE)/config/compilers.yaml:
-	$(BWRAP) $(SPACK) -e ./compilers/2-gcc find --format='{prefix}' gcc
+generate-config: compilers
+	$(BWRAP) $(MAKE) -C $@
 
-packages: compilers | bootstrap
-	$(BWRAP) $(MAKE) -C packages
+packages: compilers
+	$(BWRAP) $(MAKE) -C $@
 
 include Make.inc
 
