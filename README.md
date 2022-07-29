@@ -28,30 +28,3 @@ OpenMPI, with a few unique features:
 **Unprivileged mounts**
 
 The squashfs file can then be mounted using [squashfs-mount](https://github.com/eth-cscs/squashfs-mount) or `squashfuse`
-
-**Generating modules**
-
-There's no `modules.yaml` file right now, but generating modules goes along those lines:
-
-```yaml
-modules:
-  'default:':
-    arch_folder: false
-    roots:
-      tcl: /path/to/tcl/modules
-    enable:
-    - tcl
-    tcl:
-      projections:
-        all: '{name}/{version}-{compiler.name}-{compiler.version}'
-      all:
-        autoload: none
-        filter:
-          environment_blacklist: ['LD_LIBRARY_PATH', 'LIBRARY_PATH', 'CPATH']
-```
-
-```console
-spack module tcl refresh
-spack module tcl setdefault gcc@11
-```
-
