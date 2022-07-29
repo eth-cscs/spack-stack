@@ -1,6 +1,6 @@
 -include Make.user
 
-.PHONY: compilers packages clean
+.PHONY: compilers packages generate-config clean
 
 all: packages
 
@@ -9,14 +9,17 @@ bootstrap:
 	$(BWRAP) $(SPACK) spec zlib > /dev/null
 
 compilers: | bootstrap
-	$(BWRAP) $(MAKE) -C compilers
+	$(BWRAP) $(MAKE) -C $@
 
-packages: compilers | bootstrap
-	$(BWRAP) $(MAKE) -C packages
+generate-config: compilers
+	$(BWRAP) $(MAKE) -C $@
+
+packages: compilers
+	$(BWRAP) $(MAKE) -C $@
 
 include Make.inc
 
-store.squashfs: compilers
+store.squashfs: packages generate-config
 	$(BWRAP) "$$($(BWRAP) $(SPACK) -e ./compilers/1-gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend -Xcompression-level 3
 
 # Clean (todo: maybe call clean targets of included makefiles?)
