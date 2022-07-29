@@ -11,6 +11,9 @@ bootstrap:
 compilers: | bootstrap
 	$(BWRAP) $(MAKE) -C compilers
 
+$(STORE)/config/compilers.yaml:
+	$(BWRAP) $(SPACK) -e ./compilers/2-gcc find --format='{prefix}' gcc
+
 packages: compilers | bootstrap
 	$(BWRAP) $(MAKE) -C packages
 
