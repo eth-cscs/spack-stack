@@ -4,7 +4,7 @@ CONFIG_DIR = $(STORE)/config
 
 # These will be the prefixes of a bunch of GCCs, LLVMs and NVHPCs in the respective environments.
 ALL_COMPILER_PREFIXES = $$($(SPACK) -e ../compilers/2-gcc find --format='{prefix}' gcc) $\
-					    $$($(SPACK) -e ../compilers/3-llvm find --format='{prefix}' llvm nvhpc)
+                        $$($(SPACK) -e ../compilers/3-llvm find --format='{prefix}' llvm nvhpc)
 
 all: $(CONFIG_DIR)/compilers.yaml $(CONFIG_DIR)/upstreams.yaml
 
