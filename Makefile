@@ -19,7 +19,7 @@ packages: compilers
 
 include Make.inc
 
-store.squashfs: compilers
+store.squashfs: packages generate-config
 	$(BWRAP) "$$($(BWRAP) $(SPACK) -e ./compilers/1-gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend -Xcompression-level 3
 
 # Clean (todo: maybe call clean targets of included makefiles?)
