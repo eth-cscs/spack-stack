@@ -2,8 +2,6 @@
 
 MAKEFLAGS += --output-sync=recurse
 
-GCC_PREFIX = $$($(SPACK) -e ../compilers/2-gcc find --format '{prefix}' gcc@11)
-
 .PHONY: all .locks
 
 all: 3-llvm/generated/env
@@ -20,10 +18,10 @@ all: 3-llvm/generated/env
 	$(SPACK) external find --scope=user perl m4 autoconf automake libtool gawk python
 
 2-gcc/compilers.yaml: 1-gcc/generated/env
-	$(SPACK) compiler find --scope=user $(call compiler_bin_dirs, $(GCC_PREFIX))
+	$(SPACK) compiler find --scope=user $(call compiler_bin_dirs, $$($(SPACK) -e ./1-gcc find --format '{prefix}' gcc@11))
 
 3-llvm/compilers.yaml: 2-gcc/generated/env
-	$(SPACK) compiler find --scope=user $(call compiler_bin_dirs, $(GCC_PREFIX))
+	$(SPACK) compiler find --scope=user $(call compiler_bin_dirs, $$($(SPACK) -e ./2-gcc find --format '{prefix}' gcc@11))
 
 include ../Make.inc
 
