@@ -45,7 +45,7 @@ store.squashfs: packages generate-config
 
 # A backup of all the generated files during the build, useful for posterity,
 # excluding the binaries themselves, since they're in the squashfs file
-build.tar.gz: spack-version Make.user Make.inc Makefile packages
+build.tar.gz: spack-version Make.user Make.inc Makefile | packages
 	tar czf $@ $^ $$(find packages compilers config -maxdepth 2 -name Makefile -o -name '*.yaml')
 
 # Clean generate files, does *not* remove installed software.
