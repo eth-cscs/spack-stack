@@ -15,6 +15,8 @@ OpenMPI, with a few unique features:
 1. Copy `Make.user.example` to `Make.user` and change some variables[^1].
 2. Run `make -j$(nproc)` to bootstrap compilers and packages[^2].
 3. Run `make store.squashfs` to bundle those in a squashfs file.
+4. Run `make build.tar.gz` to create a tarball of all concrete environments and
+   generated config files for posterity. This excludes the actual software.
 
 [^1]: For reproducibility, build with a clean environment: `env -i PATH=/usr/bin:/bin make ...`.
 
