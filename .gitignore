@@ -5,9 +5,10 @@
 spack.lock
 install
 tools/view
-update-config
 */*/Makefile
 Make.user
 /store
 /tmp
 /cache
+spack-version
+build.tar.gz

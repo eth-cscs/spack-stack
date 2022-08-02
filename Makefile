@@ -1,14 +1,36 @@
 -include Make.user
 
-.PHONY: compilers packages generate-config clean
+.PHONY: compilers packages generate-config clean spack-setup
 
-all: packages
+# Keep track of what Spack version was used.
+spack-version:
+	$(BWRAP) $(SPACK) --version > $@
 
-bootstrap:
-	$(info spack bootstrap...)
-	$(BWRAP) $(SPACK) spec zlib > /dev/null
+# Do some sanity checks: (a) are we not on cray, (b) are we using the same
+# version as before, (c) ensure that the concretizer is bootstrapped to avoid a
+# race where multiple processes start doing that.
+spack-setup: spack-version
+	@printf "spack arch... " ; \
+	arch="$$($(BWRAP) $(SPACK) arch)"; \
+	printf "%s\n" "$$arch"; \
+	case "$$arch" in \
+		*cray*) \
+			echo "You are running on Cray, which is usually a bad idea, since it turns Spack into modules mode. Try running in an clean environment with env -i."; \
+			exit 1 \
+			;; \
+	esac; \
+	printf "spack version... "; \
+	version="$$($(BWRAP) $(SPACK) --version)"; \
+	printf "%s\n" "$$version"; \
+	if [ "$$version" != "$$(cat spack-version)" ]; then \
+		echo "The spack version seems to have been changed in the meantime... remove ./spack-version if that was intended"; \
+		exit 1; \
+	fi; \
+	printf "checking if spack concretizer works... "; \
+	$(BWRAP) $(SPACK) spec zlib > /dev/null; \
+	printf "yup\n"
 
-compilers: | bootstrap
+compilers: spack-setup
 	$(BWRAP) $(MAKE) -C $@
 
 generate-config: compilers
@@ -17,11 +39,17 @@ generate-config: compilers
 packages: compilers
 	$(BWRAP) $(MAKE) -C $@
 
-include Make.inc
-
+# Create a squashfs file from the installed software.
 store.squashfs: packages generate-config
 	$(BWRAP) "$$($(BWRAP) $(SPACK) -e ./compilers/1-gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend -Xcompression-level 3
 
-# Clean (todo: maybe call clean targets of included makefiles?)
+# A backup of all the generated files during the build, useful for posterity,
+# excluding the binaries themselves, since they're in the squashfs file
+build.tar.gz: spack-version Make.user Make.inc Makefile packages
+	tar czf $@ $^ $$(find packages compilers config -maxdepth 2 -name Makefile -o -name '*.yaml')
+
+# Clean generate files, does *not* remove installed software.
 clean:
-	rm -rf -- $(wildcard */*/update-config) $(wildcard */*/spack.lock) $(wildcard */*/.spack-env) $(wildcard */*/Makefile) $(wildcard */*/generated) $(wildcard cache) $(wildcard compilers/*/config.yaml) $(wildcard compilers/*/packages.yaml) $(wildcard compilers/*/compilers.yaml) $(wildcard packages/*/config.yaml) $(wildcard packages/*/packages.yaml) $(wildcard packages/*/compilers.yaml)
+	rm -rf -- $(wildcard */*/spack.lock) $(wildcard */*/.spack-env) $(wildcard */*/Makefile) $(wildcard */*/generated) $(wildcard cache) $(wildcard compilers/*/config.yaml) $(wildcard compilers/*/packages.yaml) $(wildcard compilers/*/compilers.yaml) $(wildcard packages/*/config.yaml) $(wildcard packages/*/packages.yaml) $(wildcard packages/*/compilers.yaml)
+
+include Make.inc

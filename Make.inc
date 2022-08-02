@@ -12,14 +12,6 @@ ifeq ($(wildcard $(SPACK_SYSTEM_CONFIG_PATH)),)
 $(error SPACK_SYSTEM_CONFIG_PATH = "$(SPACK_SYSTEM_CONFIG_PATH)" doesn't point to an existing directory)
 endif
 
-# Guard against accidentally running on Cray.
-SPACK_ARCH:=$(shell $(BWRAP) $(SPACK) arch)
-ifeq (cray,$(findstring cray,$(SPACK_ARCH)))
-$(error `spack arch = $(SPACK_ARCH)` contains `cray`. You likely don't want to run Spack in Cray modules mode. To fix this, run from a clean environment: `env -i PATH=/usr/bin:/bin make ...`)
-else
-$(info spack arch = $(SPACK_ARCH))
-endif
-
 store:
 	mkdir -p $(STORE)
 
