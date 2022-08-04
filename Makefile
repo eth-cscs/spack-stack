@@ -2,6 +2,8 @@
 
 .PHONY: compilers packages generate-config clean spack-setup
 
+all: packages
+
 # Keep track of what Spack version was used.
 spack-version:
 	$(BWRAP) $(SPACK) --version > $@
