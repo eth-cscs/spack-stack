@@ -37,7 +37,7 @@ do to improve reproducibility:
    ```
    env --ignore-environment PATH=/usr/bin:/bin make
    ```
-2. Hide your home folder to avoid dotfiles with bubblewrap in `Make.user`:
+2. Update `Make.user` to hide your home folder so that no user config is picked up:
    ```
    SANDBOX := bwrap --tmpfs ~ ...
    ```
