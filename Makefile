@@ -6,14 +6,14 @@ all: packages
 
 # Keep track of what Spack version was used.
 spack-version:
-	$(BWRAP) $(SPACK) --version > $@
+	$(SANDBOX) $(SPACK) --version > $@
 
 # Do some sanity checks: (a) are we not on cray, (b) are we using the same
 # version as before, (c) ensure that the concretizer is bootstrapped to avoid a
 # race where multiple processes start doing that.
 spack-setup: spack-version
 	@printf "spack arch... " ; \
-	arch="$$($(BWRAP) $(SPACK) arch)"; \
+	arch="$$($(SANDBOX) $(SPACK) arch)"; \
 	printf "%s\n" "$$arch"; \
 	case "$$arch" in \
 		*cray*) \
@@ -22,28 +22,28 @@ spack-setup: spack-version
 			;; \
 	esac; \
 	printf "spack version... "; \
-	version="$$($(BWRAP) $(SPACK) --version)"; \
+	version="$$($(SANDBOX) $(SPACK) --version)"; \
 	printf "%s\n" "$$version"; \
 	if [ "$$version" != "$$(cat spack-version)" ]; then \
 		echo "The spack version seems to have been changed in the meantime... remove ./spack-version if that was intended"; \
 		exit 1; \
 	fi; \
 	printf "checking if spack concretizer works... "; \
-	$(BWRAP) $(SPACK) spec zlib > /dev/null; \
+	$(SANDBOX) $(SPACK) spec zlib > /dev/null; \
 	printf "yup\n"
 
 compilers: spack-setup
-	$(BWRAP) $(MAKE) -C $@
+	$(SANDBOX) $(MAKE) -C $@
 
 generate-config: compilers
-	$(BWRAP) $(MAKE) -C $@
+	$(SANDBOX) $(MAKE) -C $@
 
 packages: compilers
-	$(BWRAP) $(MAKE) -C $@
+	$(SANDBOX) $(MAKE) -C $@
 
 # Create a squashfs file from the installed software.
 store.squashfs: packages generate-config
-	$(BWRAP) "$$($(BWRAP) $(SPACK) -e ./compilers/1-gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend -Xcompression-level 3
+	$(SANDBOX) "$$($(SANDBOX) $(SPACK) -e ./compilers/1-gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend -Xcompression-level 3
 
 # A backup of all the generated files during the build, useful for posterity,
 # excluding the binaries themselves, since they're in the squashfs file

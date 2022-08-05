@@ -12,20 +12,36 @@ OpenMPI, with a few unique features:
 
 **Usage**:
 
-1. Copy `Make.user.example` to `Make.user` and change some variables[^1].
-2. Run `make -j$(nproc)` to bootstrap compilers and packages[^2].
+1. Copy `Make.user.example` to `Make.user` and change some variables.
+2. Run `make -j$(nproc)` to bootstrap compilers and packages.
 3. Run `make store.squashfs` to bundle those in a squashfs file.
 4. Run `make build.tar.gz` to create a tarball of all concrete environments and
    generated config files for posterity. This excludes the actual software.
 
-[^1]: For reproducibility, build with a clean environment: `env -i PATH=/usr/bin:/bin make ...`.
+**Variables**
 
-[^2]: A few variables should be set in `Make.user`:
-    - `STORE`: where to install packages;
-    - `SPACK`: what `spack` to use;
-    - `SPACK_SYSTEM_CONFIG_PATH`: path to spack config dir (e.g. [config/hohgant](config/hohgant)).
-    - `BWRAP`: use bubblewrap for sandboxing and speed: see `Make.user.example` for details.
-    - `SPACK_INSTALL_FLAGS`: specify more install flags, like `--verbose`.
+A few variables in `Make.user`:
+
+- `STORE`: where to install packages;
+- `SPACK`: what `spack` to use;
+- `SPACK_SYSTEM_CONFIG_PATH`: path to spack config dir (e.g. [config/hohgant](config/hohgant)).
+- `SANDBOX`: run commands in a sandbox (e.g. bubblewrap), see `Make.user.example` for details.
+- `SPACK_INSTALL_FLAGS`: specify more install flags, like `--verbose`.
+
+**Reproducibility**
+
+When building on a production system instead of in a sandbox, there's a few things to
+do to improve reproducibility:
+
+1. Always run `make` inside a clean environment:
+   ```
+   env --ignore-environment PATH=/usr/bin:/bin make
+   ```
+2. Hide your home folder to avoid dotfiles with bubblewrap in `Make.user`:
+   ```
+   SANDBOX := bwrap --tmpfs ~ ...
+   ```
+3. Set `LC_ALL`, `TZ` and `SOURCE_DATE_EPOCH` to something fixed in `Make.user`.
 
 **Unprivileged mounts**
 

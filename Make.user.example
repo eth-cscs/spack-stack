@@ -11,14 +11,14 @@ SPACK := spack
 # The Spack installation root.
 STORE := /user-environment
 
-# When building inside a sandbox, use `BWRAP :=` (empty string) Without a
-# sandbox, make sure to hide sensitive data such as ~/.ssh through bubblewrap.
+# When already building inside a sandbox, use `SANDBOX :=` (empty string)
+# Without a sandbox, make sure to hide sensitive data such as ~/.ssh through bubblewrap.
 # Also bind the directories `./tmp -> /tmp` and `./store -> $(STORE)`, so that
 # builds and installs happen inside the current directory. For speed, either
 # put the project itself in-memory, or use a flag like --bind /dev/shm/store
 # $(STORE). Use `bwrap-mutable-root.sh` in case you need to create a new
 # directory at the root /.
-BWRAP := $(SOFTWARE_STACK_PROJECT)/bwrap-mutable-root.sh $\
+SANDBOX := $(SOFTWARE_STACK_PROJECT)/bwrap-mutable-root.sh $\
 	--tmpfs ~ $\
 	--bind $(SOFTWARE_STACK_PROJECT)/tmp /tmp $\
 	--bind $(SOFTWARE_STACK_PROJECT)/store $(STORE)
