@@ -4,7 +4,6 @@ spack:
   - config.yaml
   - compilers.yaml
   specs:
-  - gcc@12
   - gcc@11
   view: false
   packages:

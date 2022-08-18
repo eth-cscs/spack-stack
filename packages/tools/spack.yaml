@@ -3,7 +3,7 @@ spack:
   - compilers.yaml
   - config.yaml
   concretizer:
-    unify: true
+    unify: when_possible
   specs:
   - ccache
   - cmake
@@ -11,7 +11,7 @@ spack:
   - meson
   - ninja
   - perl
-  - python+optimizations
+  - python@3.7 #+optimizations (disable PGO for <=3.7, too slow.)
   - vim +python +lua +perl +cscope features=huge
   - emacs
   - libtree
@@ -20,10 +20,7 @@ spack:
   - tree
   - tar
   - squashfs +gzip +lz4 +lzo +xz +zstd
-  #- fd
-  #- ripgrep
-  #- hyperfine
-  #- bat
+  - reframe
   view: false
   packages:
     all:
