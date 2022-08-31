@@ -11,6 +11,8 @@ spack:
   - netcdf-fortran@4.5.4
   - nco@5.0.1
   - cdo@2.0.5
+  - ruby@3.1.2
+  - r@4.0.5
   view: false
   packages:
     all:
