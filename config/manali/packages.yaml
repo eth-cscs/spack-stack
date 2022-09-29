@@ -1,8 +1,13 @@
 packages:
+  libfabric:
+    buildable: false
+    externals:
+    - spec: libfabric@1.15.0.0
+      prefix: /opt/cray/libfabric/1.15.0.0/
   slurm:
     buildable: false
     externals:
-    - spec: slurm@20-11-8-1
+    - spec: slurm@20-11-9
       prefix: /usr
   rdma-core:
     buildable: false
@@ -13,4 +18,4 @@ packages:
     buildable: false
     externals:
     - spec: xpmem@0.29.2
-      prefix: /opt/cray/xpmem/2.2.40-2.1_2.56__g3cf3325.shasta
+      prefix: /opt/cray/xpmem/2.4.4-2.3_9.1__gff0e1d9.shasta
