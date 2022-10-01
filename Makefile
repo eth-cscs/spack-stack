@@ -43,7 +43,7 @@ packages: compilers
 
 modules: packages generate-config
 	$(SANDBOX) cp $(STORE)/config/compilers.yaml $(SOFTWARE_STACK_PROJECT)/module-config
-	$(SANDBOX) $(SPACK) -C $(SOFTWARE_STACK_PROJECT)/module-config module tcl refresh --upstream-modules --delete-tree
+	$(SANDBOX) $(SPACK) -C $(SOFTWARE_STACK_PROJECT)/module-config module tcl refresh --upstream-modules --delete-tree --yes-to-all
 
 # Create a squashfs file from the installed software.
 store.squashfs: packages generate-config
