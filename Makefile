@@ -41,6 +41,10 @@ generate-config: compilers
 packages: compilers
 	$(SANDBOX) $(MAKE) -C $@
 
+modules: packages generate-config
+	$(SANDBOX) cp $(STORE)/config/compilers.yaml $(SOFTWARE_STACK_PROJECT)/module-config
+	$(SANDBOX) $(SPACK) -C $(SOFTWARE_STACK_PROJECT)/module-config module tcl refresh --upstream-modules --delete-tree
+
 # Create a squashfs file from the installed software.
 store.squashfs: packages generate-config
 	$(SANDBOX) "$$($(SANDBOX) $(SPACK) -e ./compilers/1-gcc find --format='{prefix}' squashfs | head -n1)/bin/mksquashfs" $(STORE) $@ -all-root -no-recovery -noappend -Xcompression-level 3

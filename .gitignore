@@ -12,3 +12,6 @@ Make.user
 /cache
 spack-version
 build.tar.gz
+spack
+module-config
+.*.swp
