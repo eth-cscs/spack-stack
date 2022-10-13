@@ -20,8 +20,10 @@ if [ -f "${recipe}" ]
 then
     echo "=== setting custom modules configuration: ${recipe}"
     cp "${recipe}" module-config
+    cp ${recipe_path}/upstreams.yaml module-config
 fi
 
 echo "=== patching cray-mpich-binary spack package"
-mkdir -p spack/repos/builtin/packages/cray-mpich-binary
-cp mpich-package.py spack/repos/builtin/packages/cray-mpich-binary
+
+mkdir -p spack/var/spack/repos/builtin/packages/cray-mpich-binary
+cp cray-mpich-binary-package.py spack/var/spack/repos/builtin/packages/cray-mpich-binary/package.py
