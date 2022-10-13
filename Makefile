@@ -36,6 +36,7 @@ compilers: spack-setup
 	$(SANDBOX) $(MAKE) -C $@
 
 generate-config: compilers
+	$(SANDBOX) cp spack-version $(STORE)
 	$(SANDBOX) $(MAKE) -C $@
 
 packages: compilers
