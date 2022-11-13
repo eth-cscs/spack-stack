@@ -3,6 +3,8 @@
 recipe_path="$(pwd)/recipe"
 cp ${recipe_path}/Make.user .
 
+mkdir -p tmp store
+
 for target in gcc tools nvhpc
 do
     recipe="${recipe_path}/${target}.spack.yaml"
