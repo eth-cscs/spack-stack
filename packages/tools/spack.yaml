@@ -22,6 +22,7 @@ spack:
   - tar
   - squashfs +gzip +lz4 +lzo +xz +zstd
   - reframe
+  - imagemagick
   view: false
   packages:
     all:
