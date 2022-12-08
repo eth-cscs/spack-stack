@@ -21,6 +21,7 @@ modules:
           set:
             ECCODES_DIR: '{prefix}'
             ECCODES_INCLUDE: '{prefix}/include'
+            ECCODES_VERSION: '{version}'
       hash_length: 0
       exclude_implicits: true
       include: ['cuda', 'hdf5']
