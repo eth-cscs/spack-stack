@@ -17,25 +17,56 @@ class CrayMpichBinary(Package):
 
     maintainers = ["haampie"]
 
-    version(
-        "8.1.18.4-gcc", sha256="3e7d8c562e4d210a9658f35a7f5fbf23e550e1b9e57b6df6b99adbec7d983903"
-    )
-    version(
-        "8.1.18.4-nvhpc", sha256="d0049c7acf4e90c16c1f169f1f96913e786c5d4cf98230deb51af158664c9b50"
-    )
+    version("8.1.21.1-gcc",
+            sha256="0a6852ebf06afd249285fd09566e8489300cba96ad66e90c40df36b6af9a631e",
+            url="https://jfrog.svc.cscs.ch/artifactory/cray-mpich/cray-mpich-8.1.21.1-gcc.tar.gz")
+    version("8.1.21.1-nvhpc",
+            sha256="791b39f2ecb933060abaa8c8704e71da01c6962c4211cc99d12b9d964e9be4cb",
+            url="https://jfrog.svc.cscs.ch/artifactory/cray-mpich/cray-mpich-8.1.21.1-nvhpc.tar.gz")
+    version("8.1.18.4-gcc",
+            sha256="776c695aeed62b3f64a1bca11b30a2537a907777a8664d2f092e3deac288e4ad",
+            url="https://jfrog.svc.cscs.ch/artifactory/cray-mpich/cray-mpich-8.1.18.4-gcc.tar.gz")
+    version("8.1.18.4-nvhpc",
+            sha256="2285433363c75a04ccdf4798be5b0e296e0c9a8fb8fcb38eb0aa4ccf8d1e0843",
+            url="https://jfrog.svc.cscs.ch/artifactory/cray-mpich/cray-mpich-8.1.18.4-nvhpc.tar.gz")
+
+    variant("cuda", default=False)
+    variant("rocm", default=False)
+
+    conflicts("+cuda", when="+rocm", msg="Pick either CUDA or ROCM")
 
     provides("mpi")
 
     # Fix up binaries with patchelf.
     depends_on("patchelf", type="build")
+    with when("+cuda"):
+        # libcudart.so.11.0
+        depends_on("cuda@11.0:11", type="link")
 
-    # libcudart.so.11.0
-    depends_on("cuda@11.0:11", type="link")
+    with when("+rocm"):
+        # libamdhip64.so.5
+        depends_on("hip@5:", type="link")
+        # libhsa-runtime64.so.1
+        depends_on("hsa-rocr-dev", type="link")
 
     # libfabric.so.1
     depends_on("libfabric@1:", type="link")
 
-    # Conflicts for gcc
+    with when("@8.1.21.1-gcc"):
+        # libgfortran.so.5
+        conflicts("%gcc@:7")
+        for __compiler in spack.compilers.supported_compilers():
+            if __compiler != "gcc":
+                conflicts("%{}".format(__compiler), msg="gcc required")
+
+    with when("@8.1.21.1-nvhpc"):
+        conflicts("%nvhpc@:20.6")
+        conflicts("+rocm")
+        conflicts("~cuda")
+        for __compiler in spack.compilers.supported_compilers():
+            if __compiler != "nvhpc":
+                conflicts("%{}".format(__compiler), msg="nvhpc required")
+
     with when("@8.1.18.4-gcc"):
         # libgfortran.so.5
         conflicts("%gcc@:7")
@@ -43,9 +74,10 @@ class CrayMpichBinary(Package):
             if __compiler != "gcc":
                 conflicts("%{}".format(__compiler), msg="gcc required")
 
-    # Conflicts for nvhpc
     with when("@8.1.18.4-nvhpc"):
         conflicts("%nvhpc@:20.6")
+        conflicts("+rocm")
+        conflicts("~cuda")
         for __compiler in spack.compilers.supported_compilers():
             if __compiler != "nvhpc":
                 conflicts("%{}".format(__compiler), msg="nvhpc required")
@@ -110,3 +142,15 @@ class CrayMpichBinary(Package):
         filter_file("@@PREFIX@@", self.prefix, self.prefix.bin.mpicc, string=True)
         filter_file("@@PREFIX@@", self.prefix, self.prefix.bin.mpicxx, string=True)
         filter_file("@@PREFIX@@", self.prefix, self.prefix.bin.mpifort, string=True)
+
+        # link with the relevant gtl lib
+        if "+cuda" in self.spec:
+            gtl_library = "-lmpi_gtl_cuda"
+        elif "+rocm" in self.spec:
+            gtl_library = "-lmpi_gtl_hsa"
+        else:
+            gtl_library = ""
+
+        filter_file("@@GTL_LIBRARY@@", gtl_library, self.prefix.bin.mpicc, string=True)
+        filter_file("@@GTL_LIBRARY@@", gtl_library, self.prefix.bin.mpicxx, string=True)
+        filter_file("@@GTL_LIBRARY@@", gtl_library, self.prefix.bin.mpifort, string=True)

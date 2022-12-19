@@ -9,7 +9,7 @@ SOFTWARE_STACK_PROJECT := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 SPACK := spack
 
 # The Spack installation root.
-STORE := /mch-environment/devt
+STORE := /mch-environment/v2
 
 # When already building inside a sandbox, use `SANDBOX :=` (empty string)
 # Without a sandbox, make sure to hide sensitive data such as ~/.ssh through bubblewrap.
