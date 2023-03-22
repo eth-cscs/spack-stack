@@ -13,15 +13,15 @@ spack:
   - perl
   - python@3.7
   - python@3.10
-  - vim +python +lua +perl +cscope features=huge
-  - emacs
   - libtree
   - git
   - tmux
   - tree
-  - tar
-  - squashfs +gzip +lz4 +lzo +xz +zstd
-  - reframe
+  #- squashfs +gzip +lz4 +lzo +xz +zstd
+  #- tar
+  #- vim +python +lua +perl +cscope features=huge
+  #- emacs
+  #- reframe
   view: false
   packages:
     all:
