@@ -15,3 +15,4 @@ build.tar.gz
 spack
 module-config
 .*.swp
+config/*/repos.yaml

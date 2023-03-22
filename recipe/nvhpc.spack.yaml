@@ -5,7 +5,7 @@ spack:
   concretizer:
     unify: true
   specs:
-  - cray-mpich-binary@8.1.18.4%nvhpc +cuda
+  - cray-mpich@8.1.18.4%nvhpc +cuda
   - osu-micro-benchmarks@5.9%nvhpc +cuda cuda_arch=80
   - eccodes@2.25.0%nvhpc +tools +fortran +aec +openmp jp2k=jasper
   - netcdf-c@4.8.1%nvhpc
