@@ -59,7 +59,7 @@ fi
 
 for f in `ls module-config/*.*` Make.user
 do
-    echo UPDATING $f
+    echo === patching $f with mount point $store_root
     sed -i "s|MOUNTPOINT|${store_root}|g" $f
 done
 

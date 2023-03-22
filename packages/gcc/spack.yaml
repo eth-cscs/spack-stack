@@ -6,7 +6,7 @@ spack:
     unify: true
   specs:
   - cuda@11.8
-  - cray-mpich-binary@8.1.18.4%gcc +cuda
+  - cray-mpich@8.1.18.4%gcc +cuda
   - osu-micro-benchmarks@5.9 +cuda cuda_arch=80
   - openblas@0.3.21
   - netlib-scalapack@2.2.0
