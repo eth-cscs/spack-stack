@@ -6,7 +6,7 @@ CONFIG_DIR = $(STORE)/config
 ALL_COMPILER_PREFIXES = $$($(SPACK) -e ../compilers/2-gcc find --format='{prefix}' gcc) $\
                         $$($(SPACK) -e ../compilers/3-llvm find --format='{prefix}' llvm nvhpc)
 
-all: $(CONFIG_DIR)/compilers.yaml $(CONFIG_DIR)/upstreams.yaml
+all: $(CONFIG_DIR)/compilers.yaml $(CONFIG_DIR)/upstreams.yaml $(CONFIG_DIR)/repos.yaml
 
 # Generate a compiler config file
 $(CONFIG_DIR)/compilers.yaml:
