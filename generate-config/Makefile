@@ -16,6 +16,6 @@ $(CONFIG_DIR)/upstreams.yaml:
 	$(SPACK) config --scope=user add upstreams:system:install_tree:$(STORE)
 
 $(CONFIG_DIR)/repos.yaml:
-	cp $() $(STORE)
+	cp $(SPACK_SYSTEM_CONFIG_PATH)/repos.yaml $(CONFIG_DIR)
 
 include ../Make.inc
