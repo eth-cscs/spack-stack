@@ -1,6 +1,7 @@
 #! /usr/bin/bash
 
-cluster=$CLUSTER_NAME
+#cluster=$CLUSTER_NAME
+cluster=balfrin # hard-code balfrin
 echo "=== targeting $cluster"
 
 config_path=$(pwd)/config/$cluster
@@ -10,8 +11,8 @@ then
     exit
 fi
 
-# TODO update this for the target cluster
-store_root="/mch-environment/devt"
+# TODO update this for the MCH mount point
+store_root="/mch-environment/v3"
 
 echo "=== creating repos.yaml in $config_path/repos.yaml"
 echo "repos:
@@ -62,6 +63,3 @@ do
     echo === patching $f with mount point $store_root
     sed -i "s|MOUNTPOINT|${store_root}|g" $f
 done
-
-#mkdir -p spack/var/spack/repos/builtin/packages/cray-mpich-binary
-#cp cray-mpich-binary-package.py spack/var/spack/repos/builtin/packages/cray-mpich-binary/package.py
