@@ -19,6 +19,9 @@ cd /dev/shm/mch-build
 
 git clone git@github.com:bcumming/spack-stack.git
 cd spack-stack
+git checkout balfrinv3
+
+# TODO: update configuration before running configure.sh
 ./configure.sh
 env --ignore-environment PATH=/usr/bin:/bin:`pwd`/spack/bin make modules -j64
 env --ignore-environment PATH=/usr/bin:/bin:`pwd`/spack/bin make store.squashfs
