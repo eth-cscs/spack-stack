@@ -4,8 +4,8 @@
 cluster=balfrin # hard-code balfrin
 echo "=== targeting $cluster"
 
-config_path=$(pwd)/config/$cluster
-if [ ! -d "$config_path" ]
+system_config_path="$(pwd)/config/$cluster"
+if [ ! -d "$system_config_path" ]
 then
     echo "ERROR: no config for cluster with name $cluster"
     exit
@@ -14,9 +14,11 @@ fi
 # TODO update this for the MCH mount point
 store_root="/mch-environment/v3"
 
+config_path="$(pwd)/store/config"
+mkdir -p "$config_path"
 echo "=== creating repos.yaml in $config_path/repos.yaml"
 echo "repos:
-- ${store_root}/repo" > $config_path/repos.yaml
+- ${store_root}/repo" > "$config_path/repos.yaml"
 
 recipe_path="$(pwd)/recipe"
 cp ${recipe_path}/Make.user .
