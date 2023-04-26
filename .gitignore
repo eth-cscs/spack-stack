@@ -19,3 +19,4 @@ config/*/repos.yaml
 config/*/mirrors.yaml
 Makefile
 compilers/Makefile
+packages/Makefile
