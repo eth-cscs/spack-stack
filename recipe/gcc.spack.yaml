@@ -3,12 +3,14 @@ spack:
   - compilers.yaml
   - config.yaml
   concretizer:
-    unify: true
+    unify: when_possible
   specs:
   - cuda@11.8
   - cray-mpich@8.1.18.4%gcc +cuda
   - osu-micro-benchmarks@5.9 +cuda cuda_arch=80
   - openblas@0.3.21
+  - hdf5@1.12.2 +fortran +threadsafe ~mpi
+  - hdf5@1.12.2 +fortran +threadsafe +mpi
   - netlib-scalapack@2.2.0
   - eccodes@2.25.0 +tools +fortran +aec +openmp jp2k=jasper
   - netcdf-c@4.8.1

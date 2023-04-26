@@ -23,6 +23,8 @@ echo "repos:
 recipe_path="$(pwd)/recipe"
 cp ${recipe_path}/Make.user .
 
+cp ${recipe_path}/mirrors.yaml ./config/balfrin
+
 mkdir -p tmp store
 
 if [ ! -d "$(pwd)/spack/.git" ]
@@ -61,7 +63,7 @@ then
     cp -R ${recipe_path}/repo store
 fi
 
-for f in `ls module-config/*.*` Make.user
+for f in `ls module-config/*.*` Make.user config/balfrin/mirrors.yaml
 do
     echo === patching $f with mount point $store_root
     sed -i "s|MOUNTPOINT|${store_root}|g" $f
