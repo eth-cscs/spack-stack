@@ -4,12 +4,7 @@ This stack is specific to MCH
 
 ## status
 
-**Current Version**: v0.3
-
-**TODO** before release:
-* update the `config/balfrin/packages.yaml` for new versions of
-    * SLURM
-    * libfabric
+**Current Version**: v3
 
 ## building
 
