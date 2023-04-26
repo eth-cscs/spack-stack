@@ -16,3 +16,6 @@ spack
 module-config
 .*.swp
 config/*/repos.yaml
+config/*/mirrors.yaml
+Makefile
+compilers/Makefile

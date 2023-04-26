@@ -44,3 +44,4 @@ modules:
         gcc: '{name}/{version}'
         cray-mpich: 'cray-mpich-binary/{version}'
         python: '{name}/{version}'
+        hdf5%gcc~mpi: '{name}/{version}-serial-{compiler.name}'

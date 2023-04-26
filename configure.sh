@@ -68,3 +68,5 @@ do
     echo === patching $f with mount point $store_root
     sed -i "s|MOUNTPOINT|${store_root}|g" $f
 done
+
+source enable-cache.sh
