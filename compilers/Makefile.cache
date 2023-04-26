@@ -13,11 +13,11 @@ all: 1-gcc/generated/build_cache 2-gcc/generated/build_cache 3-llvm/generated/en
 .packages.yaml: 1-gcc/packages.yaml 2-gcc/packages.yaml 3-llvm/packages.yaml
 
 1-gcc/generated/build_cache: 1-gcc/generated/env
-	$(SPACK) -e ./1-gcc buildcache create --rebuild-index --allow-root --only=package -m alpscache $$($(SPACK) -e ./bootstrap find --format '/$${hash}')
+	$(SPACK) -e ./1-gcc buildcache create --rebuild-index --allow-root --only=package -m alpscache $$($(SPACK) -e ./1-gcc find --format '/$${hash}')
 	touch $@
 
 2-gcc/generated/build_cache: 2-gcc/generated/env
-	$(SPACK) -e ./2-gcc buildcache create --rebuild-index --allow-root --only=package -m alpscache $$($(SPACK) -e ./gcc find --format '/$${hash}')
+	$(SPACK) -e ./2-gcc buildcache create --rebuild-index --allow-root --only=package -m alpscache $$($(SPACK) -e ./2-gcc find --format '/$${hash}')
 	touch $@
 
 # Configure the install location.
