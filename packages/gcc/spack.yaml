@@ -9,6 +9,7 @@ spack:
   - cray-mpich@8.1.18.4%gcc +cuda
   - osu-micro-benchmarks@5.9 +cuda cuda_arch=80
   - openblas@0.3.21
+  - libfyaml@0.7.12
   - hdf5@1.12.2 +fortran +threadsafe ~mpi
   - hdf5@1.12.2 +fortran +threadsafe +mpi
   - netlib-scalapack@2.2.0
