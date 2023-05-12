@@ -15,15 +15,18 @@ fi
 store_root="/mch-environment/v3"
 
 config_path="$(pwd)/store/config"
+# create repos
 mkdir -p "$config_path"
 echo "=== creating repos.yaml in $config_path/repos.yaml"
 echo "repos:
 - ${store_root}/repo" > "$config_path/repos.yaml"
 
+cp $config_path/repos.yaml ${system_config_path}
+
 recipe_path="$(pwd)/recipe"
 cp ${recipe_path}/Make.user .
 
-cp ${recipe_path}/mirrors.yaml ./config/balfrin
+cp ${recipe_path}/mirrors.yaml ${system_config_path}
 
 mkdir -p tmp store
 
@@ -33,7 +36,6 @@ then
     git clone git@github.com:spack/spack.git
     (cd spack && git checkout a8b1314d188149e696eb8e7ba3e4d0de548f1894)
 fi
-cp -R ${recipe_path}/repo/packages/cray-mpich/package.py spack/var/spack/repos/builtin/packages/cray-mpich/
 
 for target in gcc tools nvhpc
 do
