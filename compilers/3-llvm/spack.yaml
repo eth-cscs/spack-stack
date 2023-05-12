@@ -3,5 +3,5 @@ spack:
   - compilers.yaml
   - config.yaml
   specs:
-  - nvhpc@22.7~blas~lapack~mpi
+  - nvhpc@23.3~blas~lapack~mpi
   view: false
