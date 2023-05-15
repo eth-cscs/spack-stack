@@ -12,7 +12,7 @@ then
 fi
 
 # TODO update this for the MCH mount point
-store_root="/mch-environment/v3"
+store_root="/mch-environment/v4"
 
 config_path="$(pwd)/store/config"
 # create repos
