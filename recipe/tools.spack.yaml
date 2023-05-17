@@ -7,7 +7,6 @@ spack:
   specs:
   - ccache
   - cmake@3.24
-  - cmake@3.18
   - gmake
   - meson
   - ninja

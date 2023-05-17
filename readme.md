@@ -4,7 +4,7 @@ This stack is specific to MCH
 
 ## status
 
-**Current Version**: v4 rc0
+**Current Version**: v4
 
 ## building
 

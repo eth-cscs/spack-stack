@@ -20,3 +20,4 @@ config/*/mirrors.yaml
 Makefile
 compilers/Makefile
 packages/Makefile
+packages/*/spack.yaml

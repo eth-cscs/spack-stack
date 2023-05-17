@@ -6,7 +6,7 @@ spack:
     unify: when_possible
   specs:
   - ccache
-  - cmake
+  - cmake@3.24
   - gmake
   - meson
   - ninja
@@ -17,6 +17,8 @@ spack:
   - git
   - tmux
   - tree
+  - ruby@3.1.0
+  - r@4.0.5
   #- squashfs +gzip +lz4 +lzo +xz +zstd
   #- tar
   #- vim +python +lua +perl +cscope features=huge
