@@ -16,7 +16,7 @@ all: gcc/generated/env nvhpc/generated/env tools/generated/build_cache
 .packages.yaml: tools/packages.yaml prgenv-nvidia/packages.yaml prgenv-gcc/packages.yaml
 
 tools/generated/build_cache: tools/generated/env
-	$(SPACK) -e ./tools buildcache create --rebuild-index --allow-root --only=package -m alpscache $$($(SPACK) -e ./tools find --format '/$${hash}')
+	$(SPACK) -e ./tools buildcache create --rebuild-index --allow-root --only=package -m alpscache $$($(SPACK) --color=never -e ./tools find --format '{/hash}')
 	touch $@
 
 gcc/config.yaml nvhpc/config.yaml tools/config.yaml: | store
