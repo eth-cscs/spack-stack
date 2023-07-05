@@ -35,8 +35,8 @@ if [ ! -d "$(pwd)/spack/.git" ]
 then
     echo "=== installing spack"
     git clone git@github.com:spack/spack.git
-    #(cd spack && git checkout a8b1314d188149e696eb8e7ba3e4d0de548f1894)
-    (cd spack && git checkout releases/v0.20)
+    (cd spack && git checkout a8b1314d188149e696eb8e7ba3e4d0de548f1894)
+    #(cd spack && git checkout releases/v0.20)
 fi
 
 for target in gcc tools nvhpc
