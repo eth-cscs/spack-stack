@@ -12,7 +12,8 @@ then
 fi
 
 # TODO update this for the MCH mount point
-store_root="/mch-environment/v4"
+#store_root="/mch-environment/v5"
+store_root="/scratch/e1000/meteoswiss/scratch/bcumming/mch-environment/v5/rc1"
 
 config_path="$(pwd)/store/config"
 # create repos

@@ -20,6 +20,26 @@ class CrayMpich(Package):
     maintainers = ["haampie"]
 
     version(
+        "8.1.25-gcc",
+        sha256="95a8a161dc9704ea7b971dc8c1b7ec4d63de57e2f6932f0aa3d1ff1d73899765",
+        url="https://jfrog.svc.cscs.ch/artifactory/cray-mpich/cray-mpich-8.1.25-gcc.tar.gz",
+    )
+    version(
+        "8.1.25-nvhpc",
+        sha256="7a89a3f5d35538a4f7984c1403ca888e1b018485597318eaefa4639341e1eb27",
+        url="https://jfrog.svc.cscs.ch/artifactory/cray-mpich/cray-mpich-8.1.25-nvhpc.tar.gz",
+    )
+    version(
+        "8.1.24-gcc",
+        sha256="3da0e421c3faaadbe18e57dd033b0ec6513e0d9ed7fbfa77f05a02bada4cd483",
+        url="https://jfrog.svc.cscs.ch/artifactory/cray-mpich/cray-mpich-8.1.24-gcc.tar.gz",
+    )
+    version(
+        "8.1.24-nvhpc",
+        sha256="1b507f4e9150cf188a0571aad0d190fc8ee981def1d6198c998673d73828ed6f",
+        url="https://jfrog.svc.cscs.ch/artifactory/cray-mpich/cray-mpich-8.1.24-nvhpc.tar.gz",
+    )
+    version(
         "8.1.23-gcc",
         sha256="2d1dfda811848d278548b0d7735f17341c70380dbf7f91dc680e5afcfb5e0038",
         url="https://jfrog.svc.cscs.ch/artifactory/cray-mpich/cray-mpich-8.1.23-gcc.tar.gz",
