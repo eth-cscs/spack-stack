@@ -5,7 +5,7 @@ spack:
   concretizer:
     unify: when_possible
   specs:
-  - cray-mpich@8.1.18.4%nvhpc +cuda
+  - cray-mpich@8.1.25%nvhpc +cuda
   - osu-micro-benchmarks@5.9%nvhpc +cuda cuda_arch=80
   - eccodes@2.25.0%nvhpc +tools +fortran +aec +openmp jp2k=jasper
   - eccodes@2.19.1%nvhpc +tools +fortran +aec +openmp jp2k=jasper
